@@ -1,0 +1,147 @@
+<section class="generate">
+  <img class="generate__logo" src="img/Logo_green.png" alt="Code à Cuisine" />
+
+  <div class="generate__intro">
+    <h1 class="generate__title">Generate recipe</h1>
+    <p class="generate__subtitle">
+      Got random stuff in your kitchen? Pop it in—we've got the perfect recipe waiting.
+    </p>
+  </div>
+
+  <div class="generate__panels">
+    <div class="generate__panel generate__panel--ingredient">
+      <div class="generate__field">
+        <label class="generate__label" for="ingredient">Ingredient</label>
+        <input id="ingredient" class="generate__input" type="text" [(ngModel)]="nameInput" />
+      </div>
+
+      <div class="generate__row">
+        <div class="generate__field generate__field--serving">
+          <label class="generate__label" for="servingSize">Serving size</label>
+          <div class="generate__serving">
+            <input
+              id="servingSize"
+              class="generate__input generate__input--number"
+              type="number"
+              [(ngModel)]="amountInput"
+            />
+            <div class="generate__unit">
+              <select id="servingUnit" class="generate__unit-select" aria-label="Unit" [(ngModel)]="unitInput">
+                <option value="gram">gram</option>
+                <option value="kg">kg</option>
+                <option value="oz">oz</option>
+                <option value="lb">lb</option>
+                <option value="ml">ml</option>
+                <option value="pc">pc</option>
+              </select>
+              <span class="generate__caret">&#9662;</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="generate__add" aria-label="Add ingredient" (click)="addIngredient()">+</button>
+      </div>
+    </div>
+
+    <div class="generate__panel generate__panel--list">
+      <span class="generate__label">List of your Ingredients</span>
+      <ul class="generate__list">
+        @for (ingredient of ingredients(); track ingredient.id) {
+          <li class="generate__list-item">
+            @if (editingId() === ingredient.id) {
+              <span class="generate__list-edit">
+                <input
+                  class="generate__input generate__input--list-amount"
+                  type="number"
+                  [(ngModel)]="draftAmount"
+                  aria-label="Amount"
+                />
+                <select
+                  class="generate__input generate__input--list-unit"
+                  [(ngModel)]="draftUnit"
+                  aria-label="Unit"
+                >
+                  <option value="gram">gram</option>
+                  <option value="kg">kg</option>
+                  <option value="oz">oz</option>
+                  <option value="lb">lb</option>
+                  <option value="ml">ml</option>
+                  <option value="pc">pc</option>
+                </select>
+                <input
+                  class="generate__input generate__input--list-name"
+                  type="text"
+                  [(ngModel)]="draftName"
+                  aria-label="Name"
+                />
+              </span>
+              <span class="generate__list-actions">
+                <button
+                  type="button"
+                  class="generate__icon-btn"
+                  aria-label="Save ingredient"
+                  (click)="saveEdit(ingredient.id)"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="generate__icon-btn"
+                  aria-label="Delete ingredient"
+                  (click)="deleteIngredient(ingredient.id)"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6" />
+                    <path d="M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                </button>
+              </span>
+            } @else {
+              <span class="generate__list-text"
+                >{{ ingredient.amount }}{{ unitLabels[ingredient.unit] }} {{ ingredient.name }}</span
+              >
+              <span class="generate__list-actions">
+                <button
+                  type="button"
+                  class="generate__icon-btn"
+                  aria-label="Edit ingredient"
+                  (click)="editIngredient(ingredient)"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="generate__icon-btn"
+                  aria-label="Delete ingredient"
+                  (click)="deleteIngredient(ingredient.id)"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6" />
+                    <path d="M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                </button>
+              </span>
+            }
+          </li>
+        }
+        </ul>
+      </div>
+  </div>
+
+  @if (ingredients().length >= 2) {
+    <div class="generate__next-row">
+      <button type="button" class="generate__next">Next step</button>
+    </div>
+  }
+</section>

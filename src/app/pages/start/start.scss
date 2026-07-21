@@ -1,0 +1,131 @@
+.start {
+  display: flex;
+  min-height: 100vh;
+  background: #3a6039;
+  color: #f5efe0;
+  overflow: hidden;
+  font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+.start__content {
+  display: flex;
+  flex: 1 1 50%;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 3rem clamp(2rem, 5vw, 5rem);
+  z-index: 1;
+}
+
+.start__logo {
+  width: 140px;
+  height: auto;
+  margin-bottom: 10rem;
+}
+
+.start__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 48px;
+  opacity: 0.9;
+}
+
+.start__title {
+  margin: 0 0 2.5rem;
+  font-size: 104px;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.start__cta {
+  align-self: flex-start;
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 6px;
+  background: #f5efe0;
+  color: #3a6039;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.start__cta:hover {
+  background: #ffffff;
+}
+
+.start__cookbook {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  color: #f5efe0;
+  text-decoration: none;
+  margin-bottom: 7rem;
+}
+
+.start__cookbook-label {
+  font-weight: 700;
+  font-size: 32px;
+}
+
+.start__cookbook-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+  font-size: 20px;
+}
+
+.start__cookbook:hover .start__cookbook-link {
+  opacity: 1;
+}
+
+.start__images {
+  position: relative;
+  flex: 1 1 50%;
+}
+
+.start__image {
+  position: absolute;
+  left: 50%;
+  width: 70%;
+  max-width: 460px;
+  height: auto;
+  transform: translateX(-50%);
+}
+
+.start__image--1 {
+  top: 0;
+}
+
+.start__image--2 {
+  top: 50%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+}
+
+.start__image--3 {
+  bottom: 0;
+  z-index: 3;
+}
+
+@media (max-width: 900px) {
+  .start {
+    flex-direction: column;
+  }
+
+  .start__content {
+    padding: 2.5rem 1.75rem;
+    gap: 2.5rem;
+  }
+
+  .start__images {
+    height: 90vh;
+  }
+
+  .start__image {
+    width: 80%;
+    max-width: 320px;
+  }
+}
