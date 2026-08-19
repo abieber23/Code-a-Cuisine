@@ -1,0 +1,80 @@
+<section class="history">
+  <a class="app-logo-link" routerLink="/"><img class="history__logo" src="img/Logo_green.png" alt="Code à Cuisine" /></a>
+
+  <a class="history__back" routerLink="/">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
+    </svg>
+    <span>Back</span>
+  </a>
+
+  <div class="history__hero">
+    <div class="history__hero-intro">
+      <h1 class="history__title">Cookbook</h1>
+      <p class="history__lead">
+        From quick bites to gourmet delights, explore them all in our ultimate cookbook and get inspired for your
+        next culinary adventure.
+      </p>
+    </div>
+
+    <div class="history__most-liked">
+      <span class="history__most-liked-label">
+        Most liked recipes
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+        </svg>
+      </span>
+
+      @if (loading()) {
+        <p class="history__hint">Loading…</p>
+      } @else if (mostLiked().length === 0) {
+        <p class="history__hint">No liked recipes yet.</p>
+      } @else {
+        <div class="history__most-liked-row">
+          @for (recipe of mostLiked(); track recipe.id) {
+            <a class="history__mini-card" [routerLink]="['/history', recipe.id]">
+              <div class="history__mini-card-top">
+                <span class="history__mini-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9" />
+                    <polyline points="12 7 12 12 15 15" />
+                  </svg>
+                  {{ recipe.cookingTime }}
+                </span>
+                <span class="history__mini-likes">
+                  <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+                  </svg>
+                  {{ recipe.likes ?? 0 }}
+                </span>
+              </div>
+              <p class="history__mini-title">{{ recipe.title || 'Recipe' }}</p>
+            </a>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (error()) {
+    <p class="history__error">{{ error() }}</p>
+  }
+
+  <div class="history__cuisines">
+    @for (tile of cuisineTiles; track tile.cuisine) {
+      <a class="history__cuisine-tile" [routerLink]="['/history/cuisine', tile.cuisine]">
+        <span class="history__cuisine-label">{{ tile.label }} {{ tile.emoji }}</span>
+        <img class="history__cuisine-image" [src]="tile.image" [alt]="tile.label" />
+      </a>
+    }
+  </div>
+
+  <a class="history__generate-new" routerLink="/generate-recipe">
+    Generate new recipe
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  </a>
+</section>

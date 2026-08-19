@@ -1,0 +1,127 @@
+.history-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+  background: #ffffff;
+  color: #233524;
+  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+.history-detail__logo {
+  align-self: flex-start;
+  width: 120px;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+
+.history-detail__back {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 3rem;
+  color: #2f6b34;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.history-detail__back svg {
+  width: 16px;
+  height: 16px;
+}
+
+.history-detail__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 4rem;
+  color: #3f4f3d;
+  font-size: 1rem;
+}
+
+.history-detail__spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #dbe4db;
+  border-top-color: #2f6b34;
+  border-radius: 50%;
+  animation: history-detail-spin 0.8s linear infinite;
+}
+
+@keyframes history-detail-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.history-detail__error {
+  margin-top: 4rem;
+  color: #b3392c;
+  font-size: 1rem;
+}
+
+app-recipe-card {
+  width: 100%;
+  max-width: 900px;
+}
+
+.history-detail__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+  padding: 1.5rem 2rem;
+  margin-top: 2.5rem;
+  border-radius: 18px;
+  background: #dbe4db;
+}
+
+.history-detail__footer p {
+  margin: 0;
+  color: #233524;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.history-detail__cookbook-btn {
+  padding: 0.7rem 1.6rem;
+  border-radius: 8px;
+  background: #2f6b34;
+  color: #fffaf2;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.history-detail__cookbook-btn:hover {
+  background: #24522a;
+}
+
+.history-detail__generate-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-end;
+  width: 100%;
+  max-width: 900px;
+  margin-top: 1.5rem;
+  color: #2f6b34;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  justify-content: flex-end;
+}
+
+.history-detail__generate-new svg {
+  width: 16px;
+  height: 16px;
+}

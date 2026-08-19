@@ -1,0 +1,102 @@
+<article class="recipe-card">
+  <div class="recipe-card__header">
+    <div class="recipe-card__header-top">
+      <span class="recipe-card__time">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9" />
+          <polyline points="12 7 12 12 15 15" />
+        </svg>
+        Cooking time: {{ recipe().cookingTime }}
+      </span>
+
+      <div class="recipe-card__badges">
+        @if (recipe().diet !== 'none') {
+          <span class="recipe-card__badge">{{ recipe().diet }}</span>
+        }
+        <span class="recipe-card__badge">{{ recipe().cookingTime }}</span>
+        <span class="recipe-card__badge">{{ recipe().cuisine }}</span>
+      </div>
+    </div>
+
+    <div class="recipe-card__header-main">
+      <div class="recipe-card__header-info">
+        <h2 class="recipe-card__title">{{ recipe().title || 'Recipe' }}</h2>
+        <div class="recipe-card__cooks">
+          <span>Cooking persons: {{ recipe().cooks }}</span>
+          @for (chef of cookNumbers(); track chef) {
+            <span class="recipe-card__chef" [class.recipe-card__chef--alt]="chef % 2 === 0">Chef {{ chef }}</span>
+          }
+        </div>
+        <p class="recipe-card__description">{{ recipe().description }}</p>
+      </div>
+
+      <div class="recipe-card__nutrition">
+        <span class="recipe-card__nutrition-label">Nutritional information</span>
+        <div class="recipe-card__nutrition-grid">
+          <div class="recipe-card__nutrition-item">
+            <strong>{{ recipe().calories }}</strong>
+            <span>kcal Energy</span>
+          </div>
+          <div class="recipe-card__nutrition-item">
+            <strong>{{ recipe().protein }}g</strong>
+            <span>Protein</span>
+          </div>
+          <div class="recipe-card__nutrition-item">
+            <strong>{{ recipe().fats }}g</strong>
+            <span>Fat</span>
+          </div>
+          <div class="recipe-card__nutrition-item">
+            <strong>{{ recipe().carbs }}g</strong>
+            <span>Carbs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recipe-card__section-header">
+    <img class="recipe-card__section-banner" src="img/recipePage/Ingredients_Header.png" alt="" />
+    <h3 class="recipe-card__section-title">Ingredients</h3>
+  </div>
+  <ul class="recipe-card__ingredients">
+    @for (ingredient of recipe().ingredients; track ingredient) {
+      <li>{{ ingredient }}</li>
+    }
+  </ul>
+
+  <div class="recipe-card__section-header">
+    <img class="recipe-card__section-banner" src="img/recipePage/Directions_Header.png" alt="" />
+    <h3 class="recipe-card__section-title">Directions</h3>
+  </div>
+  <ol class="recipe-card__steps">
+    @for (step of recipe().steps; track $index) {
+      <li class="recipe-card__step">
+        <div class="recipe-card__step-head">
+          <span class="recipe-card__step-number">{{ $index + 1 }}</span>
+          <span class="recipe-card__chef" [class.recipe-card__chef--alt]="chefForStep($index) % 2 === 0">
+            Chef {{ chefForStep($index) }}
+          </span>
+        </div>
+        <p class="recipe-card__step-text">{{ step }}</p>
+      </li>
+    }
+  </ol>
+
+  @if (savedId()) {
+    <div class="recipe-card__like">
+      <p>Just finished this meal? Give it a heart, so that the others know this is delicious.</p>
+      <button
+        type="button"
+        class="recipe-card__heart"
+        [class.recipe-card__heart--active]="liked()"
+        [disabled]="liked() || liking()"
+        (click)="giveHeart()"
+      >
+        <svg viewBox="0 0 24 24" [attr.fill]="liked() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+        </svg>
+        <span>{{ likeCount() }}</span>
+      </button>
+    </div>
+  }
+</article>

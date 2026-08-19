@@ -1,0 +1,206 @@
+.prefs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+  background: #ffffff;
+  color: #233524;
+  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+.prefs__logo {
+  align-self: flex-start;
+  width: 120px;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+
+.prefs__back {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 3rem;
+  color: #2f6b34;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.prefs__back svg {
+  width: 16px;
+  height: 16px;
+}
+
+.prefs__title {
+  margin: 0 0 2.5rem;
+  color: #233524;
+  font-size: 38px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.prefs__counters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4rem;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 1.5rem;
+}
+
+.prefs__counter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.prefs__counter-label {
+  font-size: 1rem;
+  color: #233524;
+}
+
+.prefs__stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.prefs__stepper-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #233524;
+  cursor: pointer;
+}
+
+.prefs__stepper-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.prefs__stepper-value {
+  min-width: 1.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  background: #e7e2d2;
+  font-weight: 600;
+  text-align: center;
+}
+
+.prefs__stepper-unit {
+  font-weight: 500;
+}
+
+.prefs__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  border-radius: 20px;
+  background: #dbe4db;
+}
+
+.prefs__group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  color: #233524;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.prefs__group-title svg {
+  width: 20px;
+  height: 20px;
+}
+
+.prefs__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.prefs__chip {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  background: #f2ede0;
+  color: #2f6b34;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.prefs__chip:hover {
+  background: #ece5d2;
+}
+
+.prefs__chip--active {
+  background: #2f6b34;
+  color: #f5efe0;
+}
+
+.prefs__chip-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.prefs__chip-hint {
+  color: #5c6b57;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.prefs__generate {
+  padding: 0.9rem 2.5rem;
+  border: none;
+  border-radius: 8px;
+  background: #2f6b34;
+  color: #f5efe0;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.prefs__generate:hover {
+  background: #24522a;
+}
+
+.prefs__generate:disabled {
+  background: #6b8a6d;
+  cursor: default;
+}
+
+.prefs__error {
+  margin: 1rem 0 0;
+  color: #b3392c;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  .prefs__counters {
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}

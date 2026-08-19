@@ -1,0 +1,53 @@
+<section class="recipes" [class.recipes--loading]="generating()">
+  <a class="app-logo-link" routerLink="/">
+    <img class="recipes__logo" [src]="generating() ? 'img/Logo_white.png' : 'img/Logo_green.png'" alt="Code à Cuisine" />
+  </a>
+
+  @if (!generating()) {
+    <a class="recipes__back" routerLink="/preferences">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+      <span>Preferences</span>
+    </a>
+  }
+
+  @if (generating()) {
+    <div class="recipes__loading">
+      <div class="recipes__loading-box">
+        <div class="recipes__spinner"></div>
+      </div>
+      <p class="recipes__loading-text">
+        Generating
+        <span class="recipes__dots">
+          <span>.</span><span>.</span><span>.</span>
+        </span>
+      </p>
+    </div>
+  } @else if (error()) {
+    <p class="recipes__error">{{ error() }}</p>
+  } @else if (recipes().length === 0) {
+    <p class="recipes__empty">No recipes yet — go back and generate one.</p>
+  } @else {
+    <h1 class="recipes__title">Your generated recipes</h1>
+    <div class="recipes__list">
+      @for (recipe of recipes(); track $index) {
+        <app-recipe-card [recipe]="recipe" />
+      }
+    </div>
+
+    <div class="recipes__footer">
+      <p>Find inspiration for your next culinary adventure!</p>
+      <a class="recipes__cookbook-btn" routerLink="/history">Cookbook</a>
+    </div>
+
+    <a class="recipes__generate-new" routerLink="/generate-recipe">
+      Generate new recipe
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
+    </a>
+  }
+</section>

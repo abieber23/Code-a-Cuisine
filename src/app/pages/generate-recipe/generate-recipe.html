@@ -1,5 +1,5 @@
 <section class="generate">
-  <img class="generate__logo" src="img/Logo_green.png" alt="Code à Cuisine" />
+  <a class="app-logo-link" routerLink="/"><img class="generate__logo" src="img/Logo_green.png" alt="Code à Cuisine" /></a>
 
   <div class="generate__intro">
     <h1 class="generate__title">Generate recipe</h1>
@@ -141,7 +141,7 @@
 
   @if (ingredients().length >= 2) {
     <div class="generate__next-row">
-      <button type="button" class="generate__next">Next step</button>
+      <button type="button" class="generate__next" routerLink="/preferences">Next step</button>
     </div>
   }
 </section>

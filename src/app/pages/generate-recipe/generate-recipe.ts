@@ -1,20 +1,17 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface Ingredient {
-  id: number;
-  name: string;
-  amount: number;
-  unit: string;
-}
+import { RouterLink } from '@angular/router';
+import { Ingredient, RecipeRequest } from '../../services/recipe-request';
 
 @Component({
   selector: 'app-generate-recipe',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './generate-recipe.html',
   styleUrl: './generate-recipe.scss',
 })
 export class GenerateRecipe {
+  private readonly recipeRequest = inject(RecipeRequest);
+
   protected readonly unitLabels: Record<string, string> = {
     gram: 'g',
     kg: 'kg',
@@ -24,7 +21,7 @@ export class GenerateRecipe {
     pc: '',
   };
 
-  protected readonly ingredients = signal<Ingredient[]>([]);
+  protected readonly ingredients = this.recipeRequest.ingredients;
 
   protected nameInput = '';
   protected amountInput = 100;
@@ -35,18 +32,13 @@ export class GenerateRecipe {
   protected draftAmount = 0;
   protected draftUnit = 'gram';
 
-  private nextId = 1;
-
   protected addIngredient(): void {
     const name = this.nameInput.trim();
     if (!name) {
       return;
     }
 
-    this.ingredients.update((list) => [
-      { id: this.nextId++, name, amount: this.amountInput, unit: this.unitInput },
-      ...list,
-    ]);
+    this.recipeRequest.addIngredient(name, this.amountInput, this.unitInput);
 
     this.nameInput = '';
     this.amountInput = 100;
@@ -66,18 +58,12 @@ export class GenerateRecipe {
       return;
     }
 
-    this.ingredients.update((list) =>
-      list.map((ingredient) =>
-        ingredient.id === id
-          ? { ...ingredient, name, amount: this.draftAmount, unit: this.draftUnit }
-          : ingredient,
-      ),
-    );
+    this.recipeRequest.updateIngredient(id, name, this.draftAmount, this.draftUnit);
     this.editingId.set(null);
   }
 
   protected deleteIngredient(id: number): void {
-    this.ingredients.update((list) => list.filter((ingredient) => ingredient.id !== id));
+    this.recipeRequest.removeIngredient(id);
     if (this.editingId() === id) {
       this.editingId.set(null);
     }

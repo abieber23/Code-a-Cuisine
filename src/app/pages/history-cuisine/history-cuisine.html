@@ -1,0 +1,84 @@
+<section class="history-cuisine">
+  <div class="history-cuisine__topbar">
+    <a class="app-logo-link" routerLink="/"><img class="history-cuisine__logo" src="img/Logo_green.png" alt="Code à Cuisine" /></a>
+    <a class="history-cuisine__generate-btn" routerLink="/generate-recipe">Generate a recipe</a>
+  </div>
+
+  <a class="history-cuisine__back" routerLink="/history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
+    </svg>
+    <span>Cookbook</span>
+  </a>
+
+  <div class="history-cuisine__banner">
+    <img class="history-cuisine__banner-img" src="img/cookbookPage/cuisine_header.png" alt="" />
+    <h1 class="history-cuisine__banner-title">{{ cuisine() }} cuisine</h1>
+  </div>
+
+  @if (loading()) {
+    <div class="history-cuisine__loading">
+      <div class="history-cuisine__spinner"></div>
+      <p>Loading recipes…</p>
+    </div>
+  } @else if (error()) {
+    <p class="history-cuisine__error">{{ error() }}</p>
+  } @else if (filtered().length === 0) {
+    <p class="history-cuisine__empty">No {{ cuisine() }} recipes saved yet.</p>
+  } @else {
+    <ol class="history-cuisine__list">
+      @for (recipe of pagedRecipes(); track recipe.id) {
+        <li class="history-cuisine__row">
+          <a class="history-cuisine__row-link" [routerLink]="['/history', recipe.id]">
+            <span class="history-cuisine__number">{{ $index + 1 + (currentPage() - 1) * pageSize }}</span>
+            <span class="history-cuisine__row-main">
+              <span class="history-cuisine__time">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <polyline points="12 7 12 12 15 15" />
+                </svg>
+                Cooking time: {{ recipe.cookingTime }}
+              </span>
+              <span class="history-cuisine__row-title">{{ recipe.title || 'Recipe' }}</span>
+            </span>
+          </a>
+
+          <div class="history-cuisine__row-badges">
+            @if (recipe.diet !== 'none') {
+              <span class="history-cuisine__badge">{{ recipe.diet }}</span>
+            }
+            <span class="history-cuisine__badge">{{ recipe.cookingTime }}</span>
+            <span class="history-cuisine__likes">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+              </svg>
+              {{ recipe.likes ?? 0 }}
+            </span>
+          </div>
+        </li>
+      }
+    </ol>
+
+    @if (totalPages() > 1) {
+      <nav class="history-cuisine__pagination">
+        <button type="button" class="history-cuisine__page-arrow" [disabled]="currentPage() === 1" (click)="prevPage()">‹</button>
+        @for (page of pageNumbers(); track $index) {
+          @if (page === null) {
+            <span class="history-cuisine__ellipsis">…</span>
+          } @else {
+            <button
+              type="button"
+              class="history-cuisine__page"
+              [class.history-cuisine__page--active]="page === currentPage()"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+        }
+        <button type="button" class="history-cuisine__page-arrow" [disabled]="currentPage() === totalPages()" (click)="nextPage()">›</button>
+      </nav>
+    }
+  }
+</section>

@@ -1,0 +1,37 @@
+<section class="history-detail">
+  <a class="app-logo-link" routerLink="/"><img class="history-detail__logo" src="img/Logo_green.png" alt="Code à Cuisine" /></a>
+
+  <a class="history-detail__back" routerLink="/history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
+    </svg>
+    <span>Saved recipes</span>
+  </a>
+
+  @if (loading()) {
+    <div class="history-detail__loading">
+      <div class="history-detail__spinner"></div>
+      <p>Loading recipe…</p>
+    </div>
+  } @else if (error()) {
+    <p class="history-detail__error">{{ error() }}</p>
+  } @else if (recipe()) {
+    <app-recipe-card [recipe]="recipe()!" />
+
+    <div class="history-detail__footer">
+      <p>Find inspiration for your next culinary adventure!</p>
+      <a class="history-detail__cookbook-btn" routerLink="/history">Cookbook</a>
+    </div>
+
+    <a class="history-detail__generate-new" routerLink="/generate-recipe">
+      Generate new recipe
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
+    </a>
+  } @else {
+    <p class="history-detail__error">Recipe not found.</p>
+  }
+</section>
