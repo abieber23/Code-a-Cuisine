@@ -1,17 +1,7 @@
-<section class="recipes" [class.recipes--loading]="generating()">
+<section class="recipes">
   <a class="app-logo-link" routerLink="/">
-    <img class="recipes__logo" [src]="generating() ? 'img/Logo_white.png' : 'img/Logo_green.png'" alt="Code à Cuisine" />
+    <img class="recipes__logo" src="img/Logo_white.png" alt="Code à Cuisine" />
   </a>
-
-  @if (!generating()) {
-    <a class="recipes__back" routerLink="/preferences">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12" />
-        <polyline points="12 19 5 12 12 5" />
-      </svg>
-      <span>Preferences</span>
-    </a>
-  }
 
   @if (generating()) {
     <div class="recipes__loading">
@@ -30,16 +20,51 @@
   } @else if (recipes().length === 0) {
     <p class="recipes__empty">No recipes yet — go back and generate one.</p>
   } @else {
-    <h1 class="recipes__title">Your generated recipes</h1>
-    <div class="recipes__list">
-      @for (recipe of recipes(); track $index) {
-        <app-recipe-card [recipe]="recipe" />
-      }
+    <div class="recipes__hero">
+      <div class="recipes__hero-text">
+        <h1 class="recipes__title">The recipe results</h1>
+        <p class="recipes__subtitle">
+          We took what you have and let our AI do the thinking. Here are {{ recipes().length }} easy recipes you can
+          make right now!
+        </p>
+
+        @if (preferenceBadges().length) {
+          <div class="recipes__pref-badges">
+            @for (pref of preferenceBadges(); track pref) {
+              <span class="recipes__pref-badge">{{ pref }}</span>
+            }
+          </div>
+        }
+      </div>
+
+      <img class="recipes__hero-image" src="img/recipePage/recipe_results.png" alt="" />
     </div>
 
-    <div class="recipes__footer">
-      <p>Find inspiration for your next culinary adventure!</p>
-      <a class="recipes__cookbook-btn" routerLink="/history">Cookbook</a>
+    <div class="recipes__overview">
+      @for (recipe of recipes(); track $index) {
+        <a class="recipes__card" [routerLink]="['/recipes', $index]">
+          <span class="recipes__card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 18h18" />
+              <path d="M4 18a8 8 0 0 1 16 0" />
+              <line x1="12" y1="6" x2="12" y2="3.5" />
+            </svg>
+            Recipe {{ $index + 1 }}
+          </span>
+
+          <h2 class="recipes__card-title">{{ recipe.title || 'Recipe ' + ($index + 1) }}</h2>
+
+          <span class="recipes__card-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <polyline points="12 7 12 12 15 15" />
+            </svg>
+            Cooking time: {{ recipe.cookingTime }}
+          </span>
+
+          <span class="recipes__card-view">View</span>
+        </a>
+      }
     </div>
 
     <a class="recipes__generate-new" routerLink="/generate-recipe">

@@ -1,0 +1,102 @@
+.recipe-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+  background: #ffffff;
+  color: #233524;
+  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+.recipe-detail__logo {
+  align-self: flex-start;
+  width: 120px;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+
+.recipe-detail__back {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 2rem;
+  color: #2f6b34;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.recipe-detail__back svg {
+  width: 16px;
+  height: 16px;
+}
+
+.recipe-detail__error {
+  margin-top: 4rem;
+  color: #5c6b57;
+  font-size: 1rem;
+}
+
+app-recipe-card {
+  width: 100%;
+  max-width: 900px;
+}
+
+.recipe-detail__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+  padding: 1.5rem 2rem;
+  margin-top: 2.5rem;
+  border-radius: 18px;
+  background: #dbe4db;
+}
+
+.recipe-detail__footer p {
+  margin: 0;
+  color: #233524;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.recipe-detail__cookbook-btn {
+  padding: 0.7rem 1.6rem;
+  border-radius: 8px;
+  background: #2f6b34;
+  color: #fffaf2;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.recipe-detail__cookbook-btn:hover {
+  background: #24522a;
+}
+
+.recipe-detail__generate-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-end;
+  width: 100%;
+  max-width: 900px;
+  margin-top: 1.5rem;
+  color: #2f6b34;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  justify-content: flex-end;
+}
+
+.recipe-detail__generate-new svg {
+  width: 16px;
+  height: 16px;
+}
