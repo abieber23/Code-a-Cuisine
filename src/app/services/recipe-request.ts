@@ -41,6 +41,7 @@ interface RecipeRequestPayload {
 
 const RECIPE_WEBHOOK_URL = 'http://localhost:5678/webhook/964ee35f-622c-4f81-bb8c-a4e39440ecca';
 
+/** Returns a new set with the given value added if absent, or removed if present. */
 function toggled<T>(set: Set<T>, value: T): Set<T> {
   const next = new Set(set);
   if (next.has(value)) {
@@ -51,6 +52,7 @@ function toggled<T>(set: Set<T>, value: T): Set<T> {
   return next;
 }
 
+/** Builds the free-text prompt sent to the recipe generator from the current request state. */
 function buildPromptText(
   portions: number,
   cooks: number,
@@ -97,50 +99,62 @@ export class RecipeRequest {
 
   private nextIngredientId = 1;
 
+  /** Creates the service with the HTTP client used to call the recipe generation webhook. */
   constructor(private readonly http: HttpClient) {}
 
+  /** Adds a new ingredient with a fresh id to the front of the ingredient list. */
   addIngredient(name: string, amount: number, unit: string): void {
     this.ingredientsState.update((list) => [{ id: this.nextIngredientId++, name, amount, unit }, ...list]);
   }
 
+  /** Replaces the name, amount and unit of the ingredient with the given id. */
   updateIngredient(id: number, name: string, amount: number, unit: string): void {
     this.ingredientsState.update((list) =>
       list.map((ingredient) => (ingredient.id === id ? { ...ingredient, name, amount, unit } : ingredient)),
     );
   }
 
+  /** Removes the ingredient with the given id from the list. */
   removeIngredient(id: number): void {
     this.ingredientsState.update((list) => list.filter((ingredient) => ingredient.id !== id));
   }
 
+  /** Increments the portion count by one. */
   incPortions(): void {
     this.portionsState.update((value) => value + 1);
   }
 
+  /** Decrements the portion count by one, never going below 1. */
   decPortions(): void {
     this.portionsState.update((value) => Math.max(1, value - 1));
   }
 
+  /** Increments the cook count by one. */
   incCooks(): void {
     this.cooksState.update((value) => value + 1);
   }
 
+  /** Decrements the cook count by one, never going below 1. */
   decCooks(): void {
     this.cooksState.update((value) => Math.max(1, value - 1));
   }
 
+  /** Toggles the given cooking time value in the selected set. */
   toggleCookingTime(value: CookingTime): void {
     this.cookingTimeState.update((current) => toggled(current, value));
   }
 
+  /** Toggles the given cuisine value in the selected set. */
   toggleCuisine(value: Cuisine): void {
     this.cuisineState.update((current) => toggled(current, value));
   }
 
+  /** Toggles the given diet value in the selected set. */
   toggleDiet(value: Diet): void {
     this.dietState.update((current) => toggled(current, value));
   }
 
+  /** Posts the current ingredients and preferences to the recipe webhook and stores the result. */
   requestRecipes(): void {
     const ingredients = this.ingredientsState();
     const portions = this.portionsState();

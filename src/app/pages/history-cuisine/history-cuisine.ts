@@ -44,6 +44,7 @@ export class HistoryCuisine {
     return [1, 2, 3, null, total];
   });
 
+  /** Loads all saved recipes on init so they can be filtered down to this page's cuisine. */
   constructor() {
     this.savedRecipes.list().subscribe({
       next: (recipes) => {
@@ -58,14 +59,17 @@ export class HistoryCuisine {
     });
   }
 
+  /** Jumps directly to the given page number. */
   protected goToPage(page: number): void {
     this.currentPage.set(page);
   }
 
+  /** Moves to the previous page, clamped to page 1. */
   protected prevPage(): void {
     this.currentPage.update((page) => Math.max(1, page - 1));
   }
 
+  /** Moves to the next page, clamped to the last page. */
   protected nextPage(): void {
     this.currentPage.update((page) => Math.min(this.totalPages(), page + 1));
   }

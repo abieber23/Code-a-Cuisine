@@ -32,6 +32,7 @@ export class GenerateRecipe {
   protected draftAmount = 0;
   protected draftUnit = 'gram';
 
+  /** Adds the ingredient from the input fields to the shared request state and resets the form. */
   protected addIngredient(): void {
     const name = this.nameInput.trim();
     if (!name) {
@@ -45,6 +46,7 @@ export class GenerateRecipe {
     this.unitInput = 'gram';
   }
 
+  /** Loads the given ingredient's values into the draft fields to start editing it. */
   protected editIngredient(ingredient: Ingredient): void {
     this.editingId.set(ingredient.id);
     this.draftName = ingredient.name;
@@ -52,6 +54,7 @@ export class GenerateRecipe {
     this.draftUnit = ingredient.unit;
   }
 
+  /** Persists the draft values for the given ingredient id and exits edit mode. */
   protected saveEdit(id: number): void {
     const name = this.draftName.trim();
     if (!name) {
@@ -62,6 +65,7 @@ export class GenerateRecipe {
     this.editingId.set(null);
   }
 
+  /** Removes the given ingredient and exits edit mode if it was the one being edited. */
   protected deleteIngredient(id: number): void {
     this.recipeRequest.removeIngredient(id);
     if (this.editingId() === id) {

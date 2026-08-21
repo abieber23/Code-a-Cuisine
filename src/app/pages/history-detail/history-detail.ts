@@ -17,6 +17,7 @@ export class HistoryDetail {
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
 
+  /** Loads the saved recipe matching the route's id param, if one is present. */
   constructor() {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {

@@ -36,34 +36,42 @@ export class Preferences {
     none: 'No preferences',
   };
 
+  /** Increments the portion count on the shared recipe request. */
   protected incPortions(): void {
     this.recipeRequest.incPortions();
   }
 
+  /** Decrements the portion count on the shared recipe request. */
   protected decPortions(): void {
     this.recipeRequest.decPortions();
   }
 
+  /** Increments the cook count on the shared recipe request. */
   protected incCooks(): void {
     this.recipeRequest.incCooks();
   }
 
+  /** Decrements the cook count on the shared recipe request. */
   protected decCooks(): void {
     this.recipeRequest.decCooks();
   }
 
+  /** Toggles the given cooking time preference on or off. */
   protected toggleCookingTime(value: CookingTime): void {
     this.recipeRequest.toggleCookingTime(value);
   }
 
+  /** Toggles the given cuisine preference on or off. */
   protected toggleCuisine(value: Cuisine): void {
     this.recipeRequest.toggleCuisine(value);
   }
 
+  /** Toggles the given diet preference on or off. */
   protected toggleDiet(value: Diet): void {
     this.recipeRequest.toggleDiet(value);
   }
 
+  /** Triggers recipe generation and navigates to the recipes page. */
   protected generateRecipe(): void {
     this.recipeRequest.requestRecipes();
     this.router.navigate(['/recipes']);

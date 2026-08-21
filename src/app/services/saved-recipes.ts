@@ -16,6 +16,7 @@ const SUPABASE_ANON_KEY =
 export class SavedRecipes {
   private readonly client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  /** Fetches all saved recipes, most recently created first. */
   list(): Observable<SavedRecipe[]> {
     return from(
       this.client.from('recipes').select('*').order('created_at', { ascending: false }),
@@ -29,6 +30,7 @@ export class SavedRecipes {
     );
   }
 
+  /** Fetches a single saved recipe by id, or null if it doesn't exist. */
   getById(id: string): Observable<SavedRecipe | null> {
     return from(this.client.from('recipes').select('*').eq('id', id).maybeSingle()).pipe(
       map(({ data, error }) => {
@@ -40,6 +42,7 @@ export class SavedRecipes {
     );
   }
 
+  /** Increments and persists the like count for the given recipe, returning the new total. */
   incrementLikes(id: string, currentLikes: number): Observable<number> {
     const likes = currentLikes + 1;
     return from(this.client.from('recipes').update({ likes }).eq('id', id)).pipe(

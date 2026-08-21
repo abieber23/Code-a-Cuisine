@@ -39,6 +39,7 @@ export class History {
     { cuisine: 'fusion', label: 'Fusion cuisine', emoji: '🍱', image: 'img/cookbookPage/fusion_cuisine.png' },
   ];
 
+  /** Loads all saved recipes on init to populate the cookbook overview. */
   constructor() {
     this.savedRecipes.list().subscribe({
       next: (recipes) => {

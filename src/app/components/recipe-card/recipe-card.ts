@@ -24,11 +24,13 @@ export class RecipeCard {
     Array.from({ length: Math.max(1, this.recipe().cooks) }, (_, index) => index + 1),
   );
 
+  /** Returns which cook (1-based) is responsible for the given step index, cycling through the cook count. */
   protected chefForStep(stepIndex: number): number {
     const cooks = Math.max(1, this.recipe().cooks);
     return (stepIndex % cooks) + 1;
   }
 
+  /** Likes the recipe once, optimistically updating the like count via the SavedRecipes service. */
   giveHeart(): void {
     const id = this.savedId();
     if (!id || this.liked() || this.liking()) {
