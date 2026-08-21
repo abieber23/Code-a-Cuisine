@@ -1,4 +1,5 @@
 .history-cuisine {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,11 +27,14 @@
 }
 
 .history-cuisine__generate-btn {
+  position: absolute;
+  top: 2.5rem;
+  right: clamp(1.5rem, 5vw, 4rem);
   padding: 0.7rem 1.6rem;
   border-radius: 8px;
   background: #2f6b34;
   color: #fffaf2;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
 }
@@ -47,7 +51,7 @@
   margin-bottom: 2rem;
   color: #2f6b34;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   text-decoration: none;
 }
 
@@ -161,7 +165,7 @@
   border-radius: 50%;
   background: #f3d9b1;
   color: #8a5a20;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -177,7 +181,7 @@
   align-items: center;
   gap: 0.3rem;
   color: #5c6b57;
-  font-size: 0.75rem;
+  font-size: 1rem;
   text-transform: capitalize;
 }
 
@@ -204,7 +208,7 @@
   border-radius: 999px;
   background: #dbe4db;
   color: #2f6b34;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 600;
   text-transform: capitalize;
 }
@@ -217,7 +221,7 @@
   border-radius: 999px;
   background: #f2ede0;
   color: #b3392c;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -245,7 +249,7 @@
   border-radius: 8px;
   background: none;
   color: #3f4f3d;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -267,4 +271,14 @@
 
 .history-cuisine__ellipsis {
   color: #5c6b57;
+}
+
+@media (max-width: 400px) {
+  .history-cuisine__generate-btn {
+    position: static;
+    display: block;
+    width: 100%;
+    margin-top: 2.5rem;
+    text-align: center;
+  }
 }

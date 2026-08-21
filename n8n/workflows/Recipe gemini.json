@@ -1,0 +1,265 @@
+{
+  "name": "Recipe gemini",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "964ee35f-622c-4f81-bb8c-a4e39440ecca",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        32
+      ],
+      "id": "ea2ecccd-1d0d-4be5-b057-0bd451d4e8ad",
+      "name": "Webhook",
+      "webhookId": "964ee35f-622c-4f81-bb8c-a4e39440ecca"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=bitte erstelle mir 3 verschiedene rezepte anhand folgenden vorgaben {{ $json.body.prompt }}  und gebe es mir als json wieder ich brauche folgende objekte in dem json: title, description, preferences, ingredients,portions, coocking Time, cousine, diet type, steps (1-4), calories, carbs, fats, proteins Antworte ausschließlich mit validem JSON im vorgegebenen Format. Keine Erklärungen, keine Begrüßung, keine Markdown-Codeblöcke, kein zusätzlicher Text vor oder nach dem JSON.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        32
+      ],
+      "id": "a52b2bde-597c-49be-ae0d-28059da32ae7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output.recipes }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        656,
+        32
+      ],
+      "id": "8d59e29d-8e03-4f96-8b6e-1874cbf5f19f",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"recipes\": {\n      \"type\": \"array\",\n        \"minItems\": 3,\n        \"maxItems\": 3,\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"title\": { \"type\": \"string\", \"description\": \"Kurzer Rezeptname (optional)\" },\n          \"description\": { \"type\": \"string\", \"description\": \"Kurzbeschreibung des Gerichts\" },\n          \"ingredients\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" },\n            \"description\": \"Zutatenzeilen als lesbare Strings, z. B. '200 g Reis'\"\n          },\n          \"steps\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" },\n            \"description\": \"Zubereitungsschritte in Reihenfolge\"\n          },\n          \"calories\": { \"type\": \"number\", \"description\": \"Kalorien pro Portion (kcal)\" },\n          \"fats\": { \"type\": \"number\", \"description\": \"Fett in g pro Portion\" },\n          \"carbs\": { \"type\": \"number\", \"description\": \"Kohlenhydrate in g pro Portion\" },\n          \"protein\": { \"type\": \"number\", \"description\": \"Protein in g pro Portion\" },\n          \"portions\": { \"type\": \"number\", \"description\": \"Anzahl der Portionen, die das Rezept ergibt\" },\n          \"cooks\": { \"type\": \"number\", \"description\": \"Anzahl der Köche, die für die Zubereitung sinnvoll sind\" },\n          \"cookingTime\": { \"type\": \"string\", \"enum\": [\"quick\", \"medium\", \"complex\"], \"description\": \"Zeitkategorie der Zubereitung\" },\n          \"cuisine\": { \"type\": \"string\", \"enum\": [\"german\", \"italian\", \"indian\", \"japanese\", \"gourmet\", \"fusion\"], \"description\": \"Küchenstil des Rezepts\" },\n          \"diet\": { \"type\": \"string\", \"enum\": [\"vegetarian\", \"vegan\", \"keto\", \"none\"], \"description\": \"Ernährungsform, die das Rezept erfüllt\" }\n        },\n        \"required\": [\"description\", \"ingredients\", \"steps\", \"calories\", \"fats\", \"carbs\", \"protein\", \"portions\", \"cooks\", \"cookingTime\", \"cuisine\", \"diet\"],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\"recipes\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        240
+      ],
+      "id": "fbc547b9-001f-451f-9968-61b81f207ffe",
+      "name": "Structured Output Parser",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        112,
+        240
+      ],
+      "id": "9a0439ee-c52b-4cde-a13a-0bc77126a5e2",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "WfMkI6YtYfX44Mi9",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "recipes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.description }}"
+            },
+            {
+              "fieldId": "ingredients",
+              "fieldValue": "={{ $json.ingredients }}"
+            },
+            {
+              "fieldId": "steps",
+              "fieldValue": "={{ $json.steps }}"
+            },
+            {
+              "fieldId": "calories",
+              "fieldValue": "={{ $json.calories }}"
+            },
+            {
+              "fieldId": "fats",
+              "fieldValue": "={{ $json.fats }}"
+            },
+            {
+              "fieldId": "carbs",
+              "fieldValue": "={{ $json.carbs }}"
+            },
+            {
+              "fieldId": "protein",
+              "fieldValue": "={{ $json.protein }}"
+            },
+            {
+              "fieldId": "portions",
+              "fieldValue": "={{ $json.portions }}"
+            },
+            {
+              "fieldId": "cooks",
+              "fieldValue": "={{ $json.cooks }}"
+            },
+            {
+              "fieldId": "cookingTime",
+              "fieldValue": "={{ $json.cookingTime }}"
+            },
+            {
+              "fieldId": "cuisine",
+              "fieldValue": "={{ $json.cuisine }}"
+            },
+            {
+              "fieldId": "diet",
+              "fieldValue": "={{ $json.diet }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        944,
+        -224
+      ],
+      "id": "8e5be9ad-cc8a-4457-ab37-1492fe4ec054",
+      "name": "Create a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "E5VVYu9Eii8o9hk6",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.recipes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -192
+      ],
+      "id": "45c12311-3d72-44dd-b612-3878f125fcdb",
+      "name": "Split Out"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "Create a row1": {
+      "main": [
+        []
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "760abbed-88a6-432e-a6f9-4113f6fa6a65",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "60e94583be1978f9d2862de9b8ccf36c21ecc14f77c8c7e6c770141a526fd47f"
+  },
+  "nodeGroups": [],
+  "id": "UbEinlliY33UPRzE",
+  "tags": []
+}

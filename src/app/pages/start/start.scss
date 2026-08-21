@@ -11,6 +11,7 @@
 .start__content {
   display: flex;
   flex: 1 1 50%;
+  min-width: 0;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
@@ -84,6 +85,7 @@
 .start__images {
   position: relative;
   flex: 1 1 50%;
+  min-width: 0;
 }
 
 .start__image {
@@ -111,21 +113,61 @@
 }
 
 @media (max-width: 900px) {
-  .start {
-    flex-direction: column;
+  .start__content {
+    flex: 1 1 58%;
+    padding: 2.5rem 1.25rem 2.5rem 1.5rem;
   }
 
-  .start__content {
-    padding: 2.5rem 1.75rem;
-    gap: 2.5rem;
+  .start__logo {
+    width: 100px;
+    margin-bottom: 3rem;
+  }
+
+  .start__eyebrow {
+    font-size: 1.15rem;
+  }
+
+  .start__title {
+    font-size: 2.4rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .start__cookbook {
+    margin-bottom: 2rem;
+  }
+
+  .start__cookbook-label {
+    font-size: 1.15rem;
+  }
+
+  .start__cookbook-link {
+    font-size: 1rem;
   }
 
   .start__images {
-    height: 90vh;
+    flex: 1 1 42%;
   }
 
   .start__image {
-    width: 80%;
-    max-width: 320px;
+    width: 130%;
+    max-width: none;
+    left: 100%;
   }
+}
+
+@media (max-width: 500px) {
+  .start__image {
+    width: 200%;
+  }
+}
+
+@media (max-width: 400px) {
+.start__cookbook {
+  display: block;
+  gap: 5rem;
+}
+.start__cookbook-label {
+  margin-bottom: 2rem;
+
+}
 }
