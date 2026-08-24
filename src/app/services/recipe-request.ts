@@ -39,7 +39,7 @@ interface RecipeRequestPayload {
   prompt: string;
 }
 
-const RECIPE_WEBHOOK_URL = 'http://localhost:5678/webhook/964ee35f-622c-4f81-bb8c-a4e39440ecca';
+const RECIPE_WEBHOOK_URL = 'https://adrian123.app.n8n.cloud/webhook/964ee35f-622c-4f81-bb8c-a4e39440ecca';
 
 /** Returns a new set with the given value added if absent, or removed if present. */
 function toggled<T>(set: Set<T>, value: T): Set<T> {

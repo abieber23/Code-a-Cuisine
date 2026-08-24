@@ -207,7 +207,6 @@
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
-  justify-content: flex-end;
 }
 
 .history__generate-new svg {
@@ -224,5 +223,11 @@
 @media (max-width: 480px) {
   .history__cuisines {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 375px) {
+  .history__mini-card {
+    width: 160px;
   }
 }
