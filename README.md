@@ -1,59 +1,40 @@
 # Cuisine
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.25.
+Cuisine is an Angular web app that generates recipe suggestions from ingredients you already have. You list your ingredients, set a few preferences (portions, cook count, cooking time, cuisine, diet), and the app sends the request off to a recipe-generation backend.
 
-## Development server
+## Tech stack
 
-To start a local development server, run:
+- [Angular 20](https://angular.dev/) — standalone components (no NgModules)
+- Server-side rendering via `@angular/ssr`
+- Plain hand-written SCSS per page (no CSS framework)
 
-```bash
-ng serve
-```
+## User flow
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. **Start** (`/`) — landing page.
+2. **Generate Recipe** (`/generate-recipe`) — enter ingredients (name, amount, unit).
+3. **Preferences** (`/preferences`) — choose portions, cook count, and cooking time / cuisine / diet preferences, then trigger recipe generation.
 
-## Code scaffolding
+Shared state (ingredients and preferences) lives in a single `RecipeRequest` service so it survives navigation between pages.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Getting started
 
 ```bash
-ng generate --help
+npm install
+npm start          # ng serve — dev server at http://localhost:4200, auto-reloads
 ```
 
-## Building
-
-To build the project run:
+### Other commands
 
 ```bash
-ng build
+ng build                                        # production build, output to dist/
+ng build --watch --configuration development    # incremental dev build
+ng test                                         # Karma/Jasmine unit tests
+ng test --include=**/preferences.spec.ts        # run a single spec file
+npm run serve:ssr:Cuisine                       # run the built SSR server
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+There is no e2e test setup and no lint script configured.
 
-## Running unit tests
+## Backend integration
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+`RecipeRequest.generateRecipes()` posts the bundled ingredients and preferences as JSON to an n8n webhook URL (`RECIPE_WEBHOOK_URL` in `src/app/services/recipe-request.ts`) and expects a `GeneratedRecipe[]` response. This endpoint is a placeholder until the n8n workflow is live.
