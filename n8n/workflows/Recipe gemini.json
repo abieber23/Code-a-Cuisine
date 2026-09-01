@@ -11,10 +11,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        48,
-        32
+        -480,
+        -64
       ],
-      "id": "ea2ecccd-1d0d-4be5-b057-0bd451d4e8ad",
+      "id": "ced0a017-9063-4171-80b4-86d06304397e",
       "name": "Webhook",
       "webhookId": "964ee35f-622c-4f81-bb8c-a4e39440ecca"
     },
@@ -28,10 +28,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        208,
-        32
+        -320,
+        -64
       ],
-      "id": "a52b2bde-597c-49be-ae0d-28059da32ae7",
+      "id": "39c8927a-b4a3-48ec-af31-fe15e90c05e0",
       "name": "AI Agent"
     },
     {
@@ -43,10 +43,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        656,
-        32
+        128,
+        -64
       ],
-      "id": "8d59e29d-8e03-4f96-8b6e-1874cbf5f19f",
+      "id": "ad8c726a-07ce-48eb-9fee-62fd9f79c22a",
       "name": "Respond to Webhook"
     },
     {
@@ -57,10 +57,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        432,
-        240
+        -96,
+        144
       ],
-      "id": "fbc547b9-001f-451f-9968-61b81f207ffe",
+      "id": "b1f723fb-72a7-4c29-b91a-1da6b81597c2",
       "name": "Structured Output Parser",
       "retryOnFail": true,
       "maxTries": 5
@@ -73,14 +73,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        112,
-        240
+        -416,
+        144
       ],
-      "id": "9a0439ee-c52b-4cde-a13a-0bc77126a5e2",
+      "id": "f25e1bdf-ea47-4605-a754-d8b677cff9aa",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "WfMkI6YtYfX44Mi9",
+          "id": "BtcCATQNTnNrzN1o",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -148,14 +148,14 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        944,
-        -224
+        416,
+        -320
       ],
-      "id": "8e5be9ad-cc8a-4457-ab37-1492fe4ec054",
+      "id": "8cae7076-6fce-4c8b-b222-8e4cbcc32c00",
       "name": "Create a row1",
       "credentials": {
         "supabaseApi": {
-          "id": "E5VVYu9Eii8o9hk6",
+          "id": "V8S2q9C4FFpRuFL4",
           "name": "Supabase account"
         }
       }
@@ -168,10 +168,10 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        768,
-        -192
+        240,
+        -288
       ],
-      "id": "45c12311-3d72-44dd-b612-3878f125fcdb",
+      "id": "229747bf-469c-4345-9b7b-71202f9a80d0",
       "name": "Split Out"
     }
   ],
@@ -226,16 +226,6 @@
         ]
       ]
     },
-    "Respond to Webhook": {
-      "main": [
-        []
-      ]
-    },
-    "Create a row1": {
-      "main": [
-        []
-      ]
-    },
     "Split Out": {
       "main": [
         [
@@ -254,12 +244,12 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "760abbed-88a6-432e-a6f9-4113f6fa6a65",
+  "versionId": "8328e235-4799-4e47-b9eb-71837db53a71",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "60e94583be1978f9d2862de9b8ccf36c21ecc14f77c8c7e6c770141a526fd47f"
+    "instanceId": "9b1a97d302bf0f8db057fc262e179c7ec73c4d3a5aefb73c401e9d9d6ef79528"
   },
   "nodeGroups": [],
-  "id": "UbEinlliY33UPRzE",
+  "id": "zcmJr1l0Zb5fmhgp",
   "tags": []
 }

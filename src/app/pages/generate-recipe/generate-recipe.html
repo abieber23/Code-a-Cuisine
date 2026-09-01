@@ -12,7 +12,32 @@
     <div class="generate__panel generate__panel--ingredient">
       <div class="generate__field">
         <label class="generate__label" for="ingredient">Ingredient</label>
-        <input id="ingredient" class="generate__input" type="text" [(ngModel)]="nameInput" />
+        <div class="generate__autocomplete">
+          <input
+            id="ingredient"
+            class="generate__input"
+            type="text"
+            autocomplete="off"
+            [ngModel]="nameInput"
+            (ngModelChange)="onNameInput($event)"
+            (focus)="onNameFocus()"
+            (blur)="onNameBlur()"
+            (keydown)="onNameKeydown($event)"
+          />
+          @if (suggestionsOpen() && nameSuggestions().length) {
+            <ul class="generate__suggestions">
+              @for (suggestion of nameSuggestions(); track suggestion; let i = $index) {
+                <li
+                  class="generate__suggestion"
+                  [class.generate__suggestion--active]="i === activeSuggestionIndex()"
+                  (mousedown)="selectSuggestion(suggestion)"
+                >
+                  {{ suggestion }}
+                </li>
+              }
+            </ul>
+          }
+        </div>
       </div>
 
       <div class="generate__row">

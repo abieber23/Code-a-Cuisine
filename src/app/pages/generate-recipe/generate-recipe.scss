@@ -123,6 +123,32 @@
   font-size: 1rem;
 }
 
+.generate__autocomplete {
+  display: flex;
+  flex-direction: column;
+}
+
+.generate__suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.65rem 0 0;
+  padding: 0 0.9rem;
+  list-style: none;
+}
+
+.generate__suggestion {
+  color: #4b5c4c;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.generate__suggestion:hover,
+.generate__suggestion--active {
+  color: #233524;
+  font-weight: 600;
+}
+
 .generate__row {
   display: flex;
   align-items: flex-end;

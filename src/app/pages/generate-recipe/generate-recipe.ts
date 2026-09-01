@@ -1,7 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { IngredientSuggestions } from '../../services/ingredient-suggestions';
 import { Ingredient, RecipeRequest } from '../../services/recipe-request';
+
+const MIN_SUGGESTION_LENGTH = 1;
 
 @Component({
   selector: 'app-generate-recipe',
@@ -11,6 +14,7 @@ import { Ingredient, RecipeRequest } from '../../services/recipe-request';
 })
 export class GenerateRecipe {
   private readonly recipeRequest = inject(RecipeRequest);
+  private readonly ingredientSuggestions = inject(IngredientSuggestions);
 
   protected readonly unitLabels: Record<string, string> = {
     gram: 'g',
@@ -26,6 +30,10 @@ export class GenerateRecipe {
   protected nameInput = '';
   protected amountInput = 100;
   protected unitInput = 'gram';
+
+  protected readonly nameSuggestions = signal<string[]>([]);
+  protected readonly suggestionsOpen = signal(false);
+  protected readonly activeSuggestionIndex = signal(-1);
 
   protected readonly editingId = signal<number | null>(null);
   protected draftName = '';
@@ -44,6 +52,69 @@ export class GenerateRecipe {
     this.nameInput = '';
     this.amountInput = 100;
     this.unitInput = 'gram';
+    this.nameSuggestions.set([]);
+    this.suggestionsOpen.set(false);
+  }
+
+  /** Updates the ingredient name and looks up matching autocomplete suggestions for it. */
+  protected onNameInput(value: string): void {
+    this.nameInput = value;
+    this.suggestionsOpen.set(true);
+    this.activeSuggestionIndex.set(-1);
+
+    const trimmed = value.trim();
+    this.nameSuggestions.set(
+      trimmed.length >= MIN_SUGGESTION_LENGTH ? this.ingredientSuggestions.search(trimmed) : [],
+    );
+  }
+
+  /** Reopens the suggestion list on focus if there are suggestions from a previous query. */
+  protected onNameFocus(): void {
+    if (this.nameSuggestions().length) {
+      this.suggestionsOpen.set(true);
+    }
+  }
+
+  /** Closes the suggestion list, delayed so a click on a suggestion can register first. */
+  protected onNameBlur(): void {
+    setTimeout(() => this.suggestionsOpen.set(false), 150);
+  }
+
+  /** Moves the highlighted suggestion up/down and selects it on Enter, closes the list on Escape. */
+  protected onNameKeydown(event: KeyboardEvent): void {
+    const suggestions = this.nameSuggestions();
+    if (!this.suggestionsOpen() || !suggestions.length) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.activeSuggestionIndex.update((index) => (index + 1) % suggestions.length);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.activeSuggestionIndex.update((index) => (index - 1 + suggestions.length) % suggestions.length);
+        break;
+      case 'Enter':
+        if (this.activeSuggestionIndex() >= 0) {
+          event.preventDefault();
+          this.selectSuggestion(suggestions[this.activeSuggestionIndex()]);
+        }
+        break;
+      case 'Escape':
+        this.suggestionsOpen.set(false);
+        this.activeSuggestionIndex.set(-1);
+        break;
+    }
+  }
+
+  /** Fills the ingredient name from a chosen suggestion and closes the list. */
+  protected selectSuggestion(name: string): void {
+    this.nameInput = name;
+    this.nameSuggestions.set([]);
+    this.suggestionsOpen.set(false);
+    this.activeSuggestionIndex.set(-1);
   }
 
   /** Loads the given ingredient's values into the draft fields to start editing it. */
