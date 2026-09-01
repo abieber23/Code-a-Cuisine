@@ -30,10 +30,16 @@ export class RecipeCard {
     return (stepIndex % cooks) + 1;
   }
 
-  /** Likes the recipe once, optimistically updating the like count via the SavedRecipes service. */
+  /** Likes the recipe once. Persists via the SavedRecipes service for saved recipes, or just updates locally for a freshly generated one that hasn't been saved yet. */
   giveHeart(): void {
+    if (this.liked() || this.liking()) {
+      return;
+    }
+
     const id = this.savedId();
-    if (!id || this.liked() || this.liking()) {
+    if (!id) {
+      this.liked.set(true);
+      this.likeOverride.set(this.likeCount() + 1);
       return;
     }
 

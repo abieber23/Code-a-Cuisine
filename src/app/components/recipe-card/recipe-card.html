@@ -82,21 +82,19 @@
     }
   </ol>
 
-  @if (savedId()) {
-    <div class="recipe-card__like">
-      <p>Just finished this meal? Give it a heart, so that the others know this is delicious.</p>
-      <button
-        type="button"
-        class="recipe-card__heart"
-        [class.recipe-card__heart--active]="liked()"
-        [disabled]="liked() || liking()"
-        (click)="giveHeart()"
-      >
-        <svg viewBox="0 0 24 24" [attr.fill]="liked() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-        </svg>
-        <span>{{ likeCount() }}</span>
-      </button>
-    </div>
-  }
+  <div class="recipe-card__like">
+    <p>Just finished this meal? Give it a heart, so that the others know this is delicious.</p>
+    <button
+      type="button"
+      class="recipe-card__heart"
+      [class.recipe-card__heart--active]="liked()"
+      [disabled]="liked() || liking()"
+      (click)="giveHeart()"
+    >
+      <svg viewBox="0 0 24 24" [attr.fill]="liked() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+      </svg>
+      <span>{{ likeCount() }}</span>
+    </button>
+  </div>
 </article>
