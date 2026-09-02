@@ -42,7 +42,6 @@
   align-self: flex-start;
   padding: 0.9rem 2rem;
   border: none;
-  border-radius: 6px;
   background: #f5efe0;
   color: #3a6039;
   font-size: 1rem;
@@ -181,7 +180,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .start__content {
     flex: 1 1 58%;
     padding: 2.5rem 1.25rem 2.5rem 1.5rem;

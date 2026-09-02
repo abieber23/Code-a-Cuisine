@@ -184,6 +184,7 @@ export class RecipeRequest {
           return;
         }
         this.recipesState.set(response);
+        this.ingredientsState.set([]);
       },
       error: (err) => {
         this.generatingState.set(false);

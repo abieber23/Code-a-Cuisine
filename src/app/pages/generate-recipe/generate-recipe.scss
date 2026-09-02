@@ -11,8 +11,13 @@
     Arial, sans-serif;
 }
 
+.generate .app-logo-link {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+}
+
 .generate__logo {
-  align-self: flex-start;
   width: 120px;
   height: auto;
   margin-bottom: 3rem;

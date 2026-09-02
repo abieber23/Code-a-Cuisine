@@ -1,5 +1,4 @@
 .history-cuisine {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,11 +26,8 @@
 }
 
 .history-cuisine__generate-btn {
-  position: absolute;
-  top: 2.5rem;
-  right: clamp(1.5rem, 5vw, 4rem);
+  flex-shrink: 0;
   padding: 0.7rem 1.6rem;
-  border-radius: 8px;
   background: #2f6b34;
   color: #fffaf2;
   font-size: 1rem;
@@ -45,7 +41,8 @@
 
 .history-cuisine__back {
   display: inline-flex;
-  align-self: flex-start;
+  width: 100%;
+  max-width: 1000px;
   align-items: center;
   gap: 0.4rem;
   margin-bottom: 2rem;
@@ -274,11 +271,13 @@
 }
 
 @media (max-width: 400px) {
+  .history-cuisine__topbar {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
   .history-cuisine__generate-btn {
-    position: static;
-    display: block;
     width: 100%;
-    margin-top: 2.5rem;
     text-align: center;
   }
 

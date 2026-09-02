@@ -11,8 +11,13 @@
     Arial, sans-serif;
 }
 
+.recipes .app-logo-link {
+  display: block;
+  width: 100%;
+  max-width: 1440px;
+}
+
 .recipes__logo {
-  align-self: flex-start;
   width: 120px;
   height: auto;
   margin-bottom: 2rem;
@@ -39,133 +44,10 @@
 }
 
 .recipes__burger-spinner {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  overflow: hidden;
-}
-
-.recipes__burger-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  animation-duration: 4s;
-  animation-timing-function: ease-out;
-  animation-iteration-count: infinite;
-}
-
-.recipes__burger-layer--1 {
-  animation-name: recipes-burger-layer-1;
-}
-
-.recipes__burger-layer--2 {
-  animation-name: recipes-burger-layer-2;
-}
-
-.recipes__burger-layer--3 {
-  animation-name: recipes-burger-layer-3;
-}
-
-.recipes__burger-layer--4 {
-  animation-name: recipes-burger-layer-4;
-}
-
-.recipes__burger-layer--5 {
-  animation-name: recipes-burger-layer-5;
-}
-
-.recipes__burger-layer--6 {
-  animation-name: recipes-burger-layer-6;
-}
-
-.recipes__burger-layer--7 {
-  animation-name: recipes-burger-layer-7;
-}
-
-@keyframes recipes-burger-layer-1 {
-  0%, 100% {
-    transform: translateY(-140px);
-  }
-  6%, 88% {
-    transform: translate(0, 0);
-  }
-  92% {
-    transform: translateY(-140px);
-  }
-}
-
-@keyframes recipes-burger-layer-2 {
-  0%, 8%, 100% {
-    transform: translateX(-140px);
-  }
-  14%, 88% {
-    transform: translate(0, 0);
-  }
-  92% {
-    transform: translateX(-140px);
-  }
-}
-
-@keyframes recipes-burger-layer-3 {
-  0%, 16%, 100% {
-    transform: translateX(140px);
-  }
-  22%, 88% {
-    transform: translate(0, 0);
-  }
-  92% {
-    transform: translateX(140px);
-  }
-}
-
-@keyframes recipes-burger-layer-4 {
-  0%, 24%, 100% {
-    transform: translateY(-140px);
-  }
-  30%, 88% {
-    transform: translate(0, 0);
-  }
-  92% {
-    transform: translateY(-140px);
-  }
-}
-
-@keyframes recipes-burger-layer-5 {
-  0%, 32%, 100% {
-    transform: translateX(-140px);
-  }
-  38%, 88% {
-    transform: translate(0, 0);
-  }
-  92% {
-    transform: translateX(-140px);
-  }
-}
-
-@keyframes recipes-burger-layer-6 {
-  0%, 40%, 100% {
-    transform: translateX(140px);
-  }
-  46%, 88% {
-    transform: translate(0, 0);
-  }
-  92% {
-    transform: translateX(140px);
-  }
-}
-
-@keyframes recipes-burger-layer-7 {
-  0%, 48%, 100% {
-    transform: translateY(-140px);
-  }
-  54%, 88% {
-    transform: translate(0, 0);
-  }
-  92% {
-    transform: translateY(-140px);
-  }
+  width: 250px;
+  height: 250px;
+  object-fit: contain;
+  margin-bottom: 4rem;
 }
 
 .recipes__loading-text {
@@ -339,7 +221,6 @@
 
 .recipes__card-view {
   padding: 0.65rem 1.75rem;
-  border-radius: 10px;
   background: #fffaf2;
   color: #2f6b34;
   font-size: 1rem;
@@ -349,6 +230,7 @@
 .recipes__generate-new {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 0.4rem;
   width: 100%;
   max-width: 1440px;

@@ -11,8 +11,13 @@
     Arial, sans-serif;
 }
 
+.history .app-logo-link {
+  display: block;
+  width: 100%;
+  max-width: 1100px;
+}
+
 .history__logo {
-  align-self: flex-start;
   width: 120px;
   height: auto;
   margin-bottom: 1.5rem;
@@ -20,7 +25,8 @@
 
 .history__back {
   display: inline-flex;
-  align-self: flex-start;
+  width: 100%;
+  max-width: 1100px;
   align-items: center;
   gap: 0.4rem;
   margin-bottom: 2rem;
@@ -200,7 +206,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  align-self: flex-end;
+  justify-content: flex-end;
   width: 100%;
   max-width: 1100px;
   color: #2f6b34;
