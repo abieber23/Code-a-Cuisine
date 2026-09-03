@@ -44,11 +44,7 @@
       @for (recipe of recipes(); track $index) {
         <a class="recipes__card" [routerLink]="['/recipes', $index]">
           <span class="recipes__card-label">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 18h18" />
-              <path d="M4 18a8 8 0 0 1 16 0" />
-              <line x1="12" y1="6" x2="12" y2="3.5" />
-            </svg>
+            <img class="recipes__card-icon" src="img/recipePage/recipe-icon.png" alt="" />
             Recipe {{ $index + 1 }}
           </span>
 

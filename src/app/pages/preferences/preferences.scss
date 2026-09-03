@@ -135,6 +135,12 @@
   height: 20px;
 }
 
+.prefs__group-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 .prefs__chips {
   display: flex;
   flex-wrap: wrap;
@@ -209,3 +215,27 @@
     gap: 1.5rem;
   }
 }
+
+@media (max-width: 500px) {
+  .prefs__counters {
+  justify-content: flex-start;
+  }
+
+  .prefs__chip {
+  justify-content: flex-start;
+  padding: 0.3rem 0.4rem;
+
+  } 
+
+    .prefs__panel {
+  padding: 0.6rem;
+  
+  } 
+
+    .prefs__chip-hint {
+  font-size: 0.7rem;
+  } 
+
+
+  }
+

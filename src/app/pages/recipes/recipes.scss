@@ -191,9 +191,10 @@
   font-weight: 600;
 }
 
-.recipes__card-label svg {
+.recipes__card-icon {
   width: 18px;
   height: 18px;
+  object-fit: contain;
 }
 
 .recipes__card-title {
