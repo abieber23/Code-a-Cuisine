@@ -15,6 +15,12 @@
         }
         <span class="recipe-card__badge">{{ recipe().cookingTime }}</span>
         <span class="recipe-card__badge">{{ recipe().cuisine }}</span>
+        <span class="recipe-card__badge recipe-card__badge--likes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+          </svg>
+          {{ likeCount() }}
+        </span>
       </div>
     </div>
 
@@ -27,7 +33,7 @@
             <span class="recipe-card__chef" [class.recipe-card__chef--alt]="chef % 2 === 0">Chef {{ chef }}</span>
           }
         </div>
-        <p class="recipe-card__description">{{ recipe().description }}</p>
+        
       </div>
 
       <div class="recipe-card__nutrition">
@@ -66,8 +72,7 @@
 
   <div class="recipe-card__section-header">
     <img class="recipe-card__section-banner" src="img/recipePage/Directions_Header.png" alt="" />
-    <h3 class="recipe-card__section-title">Directions</h3>
-  </div>
+<h3 class="recipe-card__section-title" style="padding-top: 20px;">Directions</h3>  </div>
   <ol class="recipe-card__steps">
     @for (step of recipe().steps; track $index) {
       <li class="recipe-card__step">
