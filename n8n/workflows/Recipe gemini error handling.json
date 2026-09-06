@@ -1,0 +1,680 @@
+{
+  "name": "Recipe gemini error handling",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -160
+      ],
+      "id": "15b2e23f-6fda-4777-b303-10a58192aacf",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\n\nreturn inputItems.map((item, index) => {\n  const data = item.json || {};\n  const workflow = data.workflow || {};\n  const execution = data.execution || {};\n  const error = execution.error || data.error || {};\n\n  const workflowName = workflow.name || 'Unbekannter Workflow';\n  const nodeName = execution.lastNodeExecuted || 'Unbekannter Node';\n  const executionId = execution.id || '-';\n  const executionUrl = execution.url || '-';\n  const errorMessage = error.message || JSON.stringify(error) || 'Keine Fehlermeldung vorhanden';\n\n  return {\n    json: {\n      ...data,\n      _alert: {\n        subject: `n8n GLOBALER FEHLER: ${workflowName}`,\n        message:\n`Ein n8n-Workflow ist unerwartet fehlgeschlagen.\n\nWorkflow: ${workflowName}\nWorkflow-ID: ${workflow.id || '-'}\nFehlgeschlagener Node: ${nodeName}\nExecution-ID: ${executionId}\nExecution-URL: ${executionUrl}\nZeitpunkt: ${new Date().toISOString()}\n\nFehler:\n${errorMessage}\n\nDieser Workflow ist der globale Notfall-Handler für ungefangene Fehler.`\n      }\n    },\n    pairedItem: { item: index }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -112
+      ],
+      "id": "d7896124-b5a1-4d05-b51a-39481cc389b1",
+      "name": "Prepare global error alert"
+    },
+    {
+      "parameters": {
+        "sendTo": "adrianbieber2@gmail.com",
+        "subject": "={{ $json._alert.subject }}",
+        "emailType": "text",
+        "message": "={{ $json._alert.message }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        144,
+        -160
+      ],
+      "id": "372b114d-b605-44bd-8492-d6d86dfe7c7a",
+      "name": "Send global error email",
+      "webhookId": "ff415739-94c9-4b52-a435-0133dd15bc4b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0vr3DYp9hM3fUku1",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "964ee35f-622c-4f81-bb8c-a4e39440ecca",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        384,
+        128
+      ],
+      "id": "0ba23185-1fdf-4c7c-be59-c20612f99e5a",
+      "name": "Webhook",
+      "webhookId": "0fccf9a5-85eb-49c3-9f13-c06c458a8832"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=bitte erstelle mir 3 verschiedene rezepte anhand folgenden vorgaben {{ $json.body.prompt }}  und gebe es mir als json wieder ich brauche folgende objekte in dem json: title, description, preferences, ingredients,portions, coocking Time, cousine, diet type, steps (1-4), calories, carbs, fats, proteins Antworte ausschließlich mit validem JSON im vorgegebenen Format. Keine Erklärungen, keine Begrüßung, keine Markdown-Codeblöcke, kein zusätzlicher Text vor oder nach dem JSON.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1296,
+        128
+      ],
+      "id": "2bdae194-4a39-4b26-8162-826f761fdf55",
+      "name": "AI Agent",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output.recipes }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1584,
+        80
+      ],
+      "id": "7d33afa7-91ee-4c3e-a92d-90580f41856c",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"recipes\": {\n      \"type\": \"array\",\n        \"minItems\": 3,\n        \"maxItems\": 3,\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"title\": { \"type\": \"string\", \"description\": \"Kurzer Rezeptname (optional)\" },\n          \"description\": { \"type\": \"string\", \"description\": \"Kurzbeschreibung des Gerichts\" },\n          \"ingredients\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" },\n            \"description\": \"Zutatenzeilen als lesbare Strings, z. B. '200 g Reis'\"\n          },\n          \"steps\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" },\n            \"description\": \"Zubereitungsschritte in Reihenfolge\"\n          },\n          \"calories\": { \"type\": \"number\", \"description\": \"Kalorien pro Portion (kcal)\" },\n          \"fats\": { \"type\": \"number\", \"description\": \"Fett in g pro Portion\" },\n          \"carbs\": { \"type\": \"number\", \"description\": \"Kohlenhydrate in g pro Portion\" },\n          \"protein\": { \"type\": \"number\", \"description\": \"Protein in g pro Portion\" },\n          \"portions\": { \"type\": \"number\", \"description\": \"Anzahl der Portionen, die das Rezept ergibt\" },\n          \"cooks\": { \"type\": \"number\", \"description\": \"Anzahl der Köche, die für die Zubereitung sinnvoll sind\" },\n          \"cookingTime\": { \"type\": \"string\", \"enum\": [\"quick\", \"medium\", \"complex\"], \"description\": \"Zeitkategorie der Zubereitung\" },\n          \"cuisine\": { \"type\": \"string\", \"enum\": [\"german\", \"italian\", \"indian\", \"japanese\", \"gourmet\", \"fusion\"], \"description\": \"Küchenstil des Rezepts\" },\n          \"diet\": { \"type\": \"string\", \"enum\": [\"vegetarian\", \"vegan\", \"keto\", \"none\"], \"description\": \"Ernährungsform, die das Rezept erfüllt\" }\n        },\n        \"required\": [\"description\", \"ingredients\", \"steps\", \"calories\", \"fats\", \"carbs\", \"protein\", \"portions\", \"cooks\", \"cookingTime\", \"cuisine\", \"diet\"],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\"recipes\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1488,
+        368
+      ],
+      "id": "46e280a5-5e09-4992-bbba-6308b812cdf1",
+      "name": "Structured Output Parser",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1232,
+        368
+      ],
+      "id": "6b2f0612-0015-4903-b52d-17a463454116",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BtcCATQNTnNrzN1o",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "recipes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.description }}"
+            },
+            {
+              "fieldId": "ingredients",
+              "fieldValue": "={{ $json.ingredients }}"
+            },
+            {
+              "fieldId": "steps",
+              "fieldValue": "={{ $json.steps }}"
+            },
+            {
+              "fieldId": "calories",
+              "fieldValue": "={{ $json.calories }}"
+            },
+            {
+              "fieldId": "fats",
+              "fieldValue": "={{ $json.fats }}"
+            },
+            {
+              "fieldId": "carbs",
+              "fieldValue": "={{ $json.carbs }}"
+            },
+            {
+              "fieldId": "protein",
+              "fieldValue": "={{ $json.protein }}"
+            },
+            {
+              "fieldId": "portions",
+              "fieldValue": "={{ $json.portions }}"
+            },
+            {
+              "fieldId": "cooks",
+              "fieldValue": "={{ $json.cooks }}"
+            },
+            {
+              "fieldId": "cookingTime",
+              "fieldValue": "={{ $json.cookingTime }}"
+            },
+            {
+              "fieldId": "cuisine",
+              "fieldValue": "={{ $json.cuisine }}"
+            },
+            {
+              "fieldId": "diet",
+              "fieldValue": "={{ $json.diet }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        -128
+      ],
+      "id": "104aea1d-bcce-49af-aa77-2373b2a7bd6c",
+      "name": "Create a row1",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "V8S2q9C4FFpRuFL4",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.recipes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        -128
+      ],
+      "id": "8a620666-3760-4087-9b55-4409ff96c267",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\nconst staticData = $getWorkflowStaticData('global');\n\nconst now = new Date();\nconst parts = new Intl.DateTimeFormat('en-GB', {\n  timeZone: 'Europe/Berlin',\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit',\n}).formatToParts(now);\n\nconst getPart = (type) => parts.find((p) => p.type === type)?.value;\nconst today = `${getPart('year')}-${getPart('month')}-${getPart('day')}`;\n\nif (staticData.aiLimitDate !== today) {\n  staticData.aiLimitDate = today;\n  staticData.aiLimitCount = 0;\n  staticData.aiLimitAlertSent = false;\n}\n\nstaticData.aiLimitCount = Number(staticData.aiLimitCount || 0) + 1;\n\nconst limit = 20;\nconst allowed = staticData.aiLimitCount <= limit;\nconst notify = !allowed && !staticData.aiLimitAlertSent;\n\nif (notify) {\n  staticData.aiLimitAlertSent = true;\n}\n\nreturn inputItems.map((item, index) => ({\n  json: {\n    ...item.json,\n    _rateLimit: {\n      date: today,\n      timezone: 'Europe/Berlin',\n      count: staticData.aiLimitCount,\n      limit,\n      allowed,\n      notify,\n    },\n  },\n  pairedItem: { item: index },\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        816,
+        128
+      ],
+      "id": "b5e75c86-c047-4474-9afc-7bbb65ff106f",
+      "name": "Daily AI Limit Counter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8ff66ac5-4c33-4900-872b-357db26a5c43",
+              "leftValue": "={{ $json._rateLimit.allowed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1056,
+        128
+      ],
+      "id": "c91e5a44-cfa7-4184-be9c-e460587fbd01",
+      "name": "AI call allowed?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6466ffa1-f989-4d9e-9743-00bd2651f412",
+              "leftValue": "={{ $json._rateLimit.notify }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1088,
+        528
+      ],
+      "id": "f27e3c37-87d6-49b6-9d22-5930c25c0ba5",
+      "name": "Send limit alert?"
+    },
+    {
+      "parameters": {
+        "sendTo": "adrianbieber2@gmail.com",
+        "subject": "={{ $json._alert.subject }}",
+        "emailType": "text",
+        "message": "={{ $json._alert.message }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2096,
+        528
+      ],
+      "id": "42f872c3-d356-494a-b734-6a6ee4171a86",
+      "name": "Send error email",
+      "webhookId": "e5758475-5b9a-4d78-a937-8637b8ca7eb0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0vr3DYp9hM3fUku1",
+          "name": "Gmail account"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { error: 'DAILY_AI_LIMIT_EXCEEDED', message: 'Das tägliche KI-Limit wurde erreicht. Bitte am nächsten Kalendertag erneut versuchen.', limit: $json._rateLimit.limit, count: $json._rateLimit.count, date: $json._rateLimit.date, timezone: $json._rateLimit.timezone } }}",
+        "options": {
+          "responseCode": 429
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1280,
+        -64
+      ],
+      "id": "aa79e15f-9a45-45bc-86cc-8b9bf22cc171",
+      "name": "Respond - AI limit exceeded"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ab79e65e-b990-4b1d-982c-427a5a6f1b00",
+              "leftValue": "={{ typeof $json.body?.prompt === 'string' && $json.body.prompt.trim().length > 0 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        592,
+        128
+      ],
+      "id": "b826df86-7cb5-4882-8b2d-8e173bb91bab",
+      "name": "Input valid?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { error: 'INVALID_INPUT', message: 'Das Feld body.prompt fehlt, ist kein Text oder ist leer.' } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        816,
+        -144
+      ],
+      "id": "b6babc97-d64c-4cad-8beb-ae1ec944a157",
+      "name": "Respond - Invalid input"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\n\nreturn inputItems.map((item, index) => {\n  const r = item.json._rateLimit || {};\n  return {\n    json: {\n      ...item.json,\n      _alert: {\n        subject: 'n8n Warnung: Tägliches KI-Limit überschritten',\n        message:\n`Der Recipe-gemini-Workflow hat das tägliche KI-Limit erreicht.\n\nDatum: ${r.date || '-'}\nZeitzone: ${r.timezone || 'Europe/Berlin'}\nGezählte Aufrufe: ${r.count ?? '-'}\nLimit: ${r.limit ?? '-'}\n\nDer AI Agent wurde für diesen und weitere Aufrufe heute NICHT ausgeführt.\nDiese Limit-Mail wird pro Tag nur einmal verschickt.\n\nFehlercode: DAILY_AI_LIMIT_EXCEEDED`\n      }\n    },\n    pairedItem: { item: index }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        544
+      ],
+      "id": "b7181fec-dc15-436b-b0a4-afa0cdbbd604",
+      "name": "Prepare limit alert"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\n\nreturn inputItems.map((item, index) => {\n  let details = '';\n  try {\n    details = JSON.stringify(item.json, null, 2);\n  } catch {\n    details = String(item.json);\n  }\n\n  return {\n    json: {\n      ...item.json,\n      _alert: {\n        subject: 'n8n Fehler: Gemini / AI Agent fehlgeschlagen',\n        message:\n`Im Recipe-gemini-Workflow ist der AI Agent bzw. Gemini/Structured Output fehlgeschlagen.\n\nZeitpunkt: ${new Date().toISOString()}\n\nDer Webhook erhält HTTP 503 und der Supabase-Zweig wird für diesen Request nicht ausgeführt.\n\nFehlerdaten:\n${details}`\n      }\n    },\n    pairedItem: { item: index }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        240
+      ],
+      "id": "38b5e19e-9fee-4297-921b-159607a67039",
+      "name": "Prepare AI error alert"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { error: 'AI_SERVICE_ERROR', message: 'Die Rezepte konnten aktuell nicht erstellt werden. Bitte später erneut versuchen.' } }}",
+        "options": {
+          "responseCode": 503
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1824,
+        240
+      ],
+      "id": "3cf454d2-dfa8-435c-a570-0f078b2c8c7b",
+      "name": "Respond - AI service error"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\n\nreturn inputItems.map((item, index) => {\n  let details = '';\n  try {\n    details = JSON.stringify(item.json, null, 2);\n  } catch {\n    details = String(item.json);\n  }\n\n  return {\n    json: {\n      ...item.json,\n      _alert: {\n        subject: 'n8n Fehler: Supabase-Speicherung fehlgeschlagen',\n        message:\n`Im Recipe-gemini-Workflow konnte mindestens ein Rezept nicht in Supabase gespeichert werden.\n\nZeitpunkt: ${new Date().toISOString()}\n\nHinweis:\nDie erfolgreiche Webhook-Antwort wird im bestehenden Aufbau direkt nach dem AI Agent gesendet. Deshalb kann der Client das Rezept bereits erhalten haben, obwohl die Datenbank-Speicherung danach fehlgeschlagen ist.\n\nFehlerdaten:\n${details}`\n      }\n    },\n    pairedItem: { item: index }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2064,
+        32
+      ],
+      "id": "141221a5-3fc4-4361-bacc-f87b56d50c74",
+      "name": "Prepare Supabase error alert"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Prepare global error alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare global error alert": {
+      "main": [
+        [
+          {
+            "node": "Send global error email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Input valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Input valid?": {
+      "main": [
+        [
+          {
+            "node": "Daily AI Limit Counter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond - Invalid input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily AI Limit Counter": {
+      "main": [
+        [
+          {
+            "node": "AI call allowed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI call allowed?": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond - AI limit exceeded",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send limit alert?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send limit alert?": {
+      "main": [
+        [
+          {
+            "node": "Prepare limit alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare limit alert": {
+      "main": [
+        [
+          {
+            "node": "Send error email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare AI error alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare AI error alert": {
+      "main": [
+        [
+          {
+            "node": "Respond - AI service error",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send error email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Prepare Supabase error alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Supabase error alert": {
+      "main": [
+        [
+          {
+            "node": "Send error email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "627d0901-3479-41d3-9dc4-ec8582ad9910",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9b1a97d302bf0f8db057fc262e179c7ec73c4d3a5aefb73c401e9d9d6ef79528"
+  },
+  "nodeGroups": [],
+  "id": "ssrCHT0SRDNJsHqh",
+  "tags": []
+}
