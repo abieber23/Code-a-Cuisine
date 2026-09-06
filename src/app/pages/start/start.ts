@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { RecipeRequest } from '../../services/recipe-request';
 
 @Component({
   selector: 'app-start',
@@ -7,4 +8,10 @@ import { RouterLink } from '@angular/router';
   templateUrl: './start.html',
   styleUrl: './start.scss',
 })
-export class Start {}
+export class Start {
+  private readonly recipeRequest = inject(RecipeRequest);
+
+  constructor() {
+    this.recipeRequest.clearIngredients();
+  }
+}

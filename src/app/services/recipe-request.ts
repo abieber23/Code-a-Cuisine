@@ -119,6 +119,11 @@ export class RecipeRequest {
     this.ingredientsState.update((list) => list.filter((ingredient) => ingredient.id !== id));
   }
 
+  /** Clears the ingredient list. */
+  clearIngredients(): void {
+    this.ingredientsState.set([]);
+  }
+
   /** Increments the portion count by one. */
   incPortions(): void {
     this.portionsState.update((value) => value + 1);
