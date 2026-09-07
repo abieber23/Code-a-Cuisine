@@ -38,6 +38,9 @@
             </ul>
           }
         </div>
+        @if (nameError()) {
+          <p class="generate__error">{{ nameError() }}</p>
+        }
       </div>
 
       <div class="generate__row">
@@ -64,7 +67,15 @@
           </div>
         </div>
 
-        <button type="button" class="generate__add" aria-label="Add ingredient" (click)="addIngredient()">+</button>
+        <button
+          type="button"
+          class="generate__add"
+          aria-label="Add ingredient"
+          [disabled]="validating()"
+          (click)="addIngredient()"
+        >
+          +
+        </button>
       </div>
     </div>
 

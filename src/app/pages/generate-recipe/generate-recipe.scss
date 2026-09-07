@@ -154,6 +154,12 @@
   font-weight: 600;
 }
 
+.generate__error {
+  margin: 0.5rem 0 0;
+  color: #b3392c;
+  font-size: 0.9rem;
+}
+
 .generate__row {
   display: flex;
   align-items: flex-end;
@@ -205,6 +211,11 @@
   font-size: 1.3rem;
   line-height: 1;
   cursor: pointer;
+}
+
+.generate__add:disabled {
+  cursor: default;
+  opacity: 0.6;
 }
 
 .generate__list {

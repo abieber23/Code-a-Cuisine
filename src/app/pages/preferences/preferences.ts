@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { CookingTime, Cuisine, Diet, RecipeRequest } from '../../services/recipe-request';
+import { CookingTime, Cuisine, Diet, MAX_COOKS, MAX_PORTIONS, RecipeRequest } from '../../services/recipe-request';
 
 @Component({
   selector: 'app-preferences',
@@ -14,6 +14,8 @@ export class Preferences {
 
   protected readonly portions = this.recipeRequest.portions;
   protected readonly cooks = this.recipeRequest.cooks;
+  protected readonly maxPortions = MAX_PORTIONS;
+  protected readonly maxCooks = MAX_COOKS;
   protected readonly cookingTime = this.recipeRequest.cookingTime;
   protected readonly cuisine = this.recipeRequest.cuisine;
   protected readonly diet = this.recipeRequest.diet;

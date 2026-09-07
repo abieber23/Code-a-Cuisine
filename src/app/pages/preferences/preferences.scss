@@ -89,6 +89,11 @@
   cursor: pointer;
 }
 
+.prefs__stepper-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .prefs__stepper-btn svg {
   width: 22px;
   height: 22px;

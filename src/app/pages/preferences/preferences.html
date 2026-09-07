@@ -23,7 +23,7 @@
         </button>
         <span class="prefs__stepper-value">{{ portions() }}</span>
         <span class="prefs__stepper-unit">Portions</span>
-        <button type="button" class="prefs__stepper-btn" aria-label="Increase portions" (click)="incPortions()">
+        <button type="button" class="prefs__stepper-btn" aria-label="Increase portions" [disabled]="portions() >= maxPortions" (click)="incPortions()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="4" />
             <line x1="7" y1="12" x2="17" y2="12" />
@@ -44,7 +44,7 @@
         </button>
         <span class="prefs__stepper-value">{{ cooks() }}</span>
         <span class="prefs__stepper-unit">Person</span>
-        <button type="button" class="prefs__stepper-btn" aria-label="Increase cooks" (click)="incCooks()">
+        <button type="button" class="prefs__stepper-btn" aria-label="Increase cooks" [disabled]="cooks() >= maxCooks" (click)="incCooks()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="4" />
             <line x1="7" y1="12" x2="17" y2="12" />

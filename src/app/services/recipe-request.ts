@@ -41,15 +41,17 @@ interface RecipeRequestPayload {
 
 const RECIPE_WEBHOOK_URL = 'https://adrian123.app.n8n.cloud/webhook/964ee35f-622c-4f81-bb8c-a4e39440ecca';
 
-/** Returns a new set with the given value added if absent, or removed if present. */
-function toggled<T>(set: Set<T>, value: T): Set<T> {
-  const next = new Set(set);
-  if (next.has(value)) {
-    next.delete(value);
-  } else {
-    next.add(value);
-  }
-  return next;
+/** Upper bound for the portion count on the preferences page. */
+export const MAX_PORTIONS = 10;
+/** Upper bound for the cook count on the preferences page. */
+export const MAX_COOKS = 6;
+
+/**
+ * Returns a set containing only the given value, enforcing single-select within a preference
+ * group. Clicking the already-selected value clears the selection instead.
+ */
+function selectSingle<T>(set: Set<T>, value: T): Set<T> {
+  return set.has(value) ? new Set<T>() : new Set<T>([value]);
 }
 
 /** Builds the free-text prompt sent to the recipe generator from the current request state. */
@@ -124,9 +126,9 @@ export class RecipeRequest {
     this.ingredientsState.set([]);
   }
 
-  /** Increments the portion count by one. */
+  /** Increments the portion count by one, never going above MAX_PORTIONS. */
   incPortions(): void {
-    this.portionsState.update((value) => value + 1);
+    this.portionsState.update((value) => Math.min(MAX_PORTIONS, value + 1));
   }
 
   /** Decrements the portion count by one, never going below 1. */
@@ -134,9 +136,9 @@ export class RecipeRequest {
     this.portionsState.update((value) => Math.max(1, value - 1));
   }
 
-  /** Increments the cook count by one. */
+  /** Increments the cook count by one, never going above MAX_COOKS. */
   incCooks(): void {
-    this.cooksState.update((value) => value + 1);
+    this.cooksState.update((value) => Math.min(MAX_COOKS, value + 1));
   }
 
   /** Decrements the cook count by one, never going below 1. */
@@ -144,19 +146,19 @@ export class RecipeRequest {
     this.cooksState.update((value) => Math.max(1, value - 1));
   }
 
-  /** Toggles the given cooking time value in the selected set. */
+  /** Selects the given cooking time value, replacing any previous selection in the group. */
   toggleCookingTime(value: CookingTime): void {
-    this.cookingTimeState.update((current) => toggled(current, value));
+    this.cookingTimeState.update((current) => selectSingle(current, value));
   }
 
-  /** Toggles the given cuisine value in the selected set. */
+  /** Selects the given cuisine value, replacing any previous selection in the group. */
   toggleCuisine(value: Cuisine): void {
-    this.cuisineState.update((current) => toggled(current, value));
+    this.cuisineState.update((current) => selectSingle(current, value));
   }
 
-  /** Toggles the given diet value in the selected set. */
+  /** Selects the given diet value, replacing any previous selection in the group. */
   toggleDiet(value: Diet): void {
-    this.dietState.update((current) => toggled(current, value));
+    this.dietState.update((current) => selectSingle(current, value));
   }
 
   /** Posts the current ingredients and preferences to the recipe webhook and stores the result. */

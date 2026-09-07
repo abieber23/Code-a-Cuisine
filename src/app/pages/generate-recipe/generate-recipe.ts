@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { IngredientSuggestions } from '../../services/ingredient-suggestions';
 import { Ingredient, RecipeRequest } from '../../services/recipe-request';
+import { WordValidator } from '../../services/word-validator';
 
 const MIN_SUGGESTION_LENGTH = 1;
 
@@ -15,6 +16,7 @@ const MIN_SUGGESTION_LENGTH = 1;
 export class GenerateRecipe {
   private readonly recipeRequest = inject(RecipeRequest);
   private readonly ingredientSuggestions = inject(IngredientSuggestions);
+  private readonly wordValidator = inject(WordValidator);
 
   protected readonly unitLabels: Record<string, string> = {
     gram: 'g',
@@ -40,20 +42,38 @@ export class GenerateRecipe {
   protected draftAmount = 0;
   protected draftUnit = 'gram';
 
-  /** Adds the ingredient from the input fields to the shared request state and resets the form. */
+  protected readonly validating = signal(false);
+  protected readonly nameError = signal<string | null>(null);
+
+  /**
+   * Validates the ingredient name against an online German/English dictionary, then adds it
+   * to the shared request state and resets the form.
+   */
   protected addIngredient(): void {
     const name = this.nameInput.trim();
     if (!name) {
       return;
     }
 
-    this.recipeRequest.addIngredient(name, this.amountInput, this.unitInput);
+    this.validating.set(true);
+    this.nameError.set(null);
 
-    this.nameInput = '';
-    this.amountInput = 100;
-    this.unitInput = 'gram';
-    this.nameSuggestions.set([]);
-    this.suggestionsOpen.set(false);
+    this.wordValidator.isValidPhrase(name).subscribe((valid) => {
+      this.validating.set(false);
+
+      if (!valid) {
+        this.nameError.set('Please enter a valid Ingredient');
+        return;
+      }
+
+      this.recipeRequest.addIngredient(name, this.amountInput, this.unitInput);
+
+      this.nameInput = '';
+      this.amountInput = 100;
+      this.unitInput = 'gram';
+      this.nameSuggestions.set([]);
+      this.suggestionsOpen.set(false);
+    });
   }
 
   /** Updates the ingredient name and looks up matching autocomplete suggestions for it. */
@@ -61,6 +81,7 @@ export class GenerateRecipe {
     this.nameInput = value;
     this.suggestionsOpen.set(true);
     this.activeSuggestionIndex.set(-1);
+    this.nameError.set(null);
 
     const trimmed = value.trim();
     this.nameSuggestions.set(
