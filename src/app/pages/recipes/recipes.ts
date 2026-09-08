@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Cuisine, CookingTime, RecipeRequest } from '../../services/recipe-request';
+import { Cuisine, CookingTime, Diet, RecipeRequest } from '../../services/recipe-request';
 
 const cuisineLabels: Record<Cuisine, string> = {
   german: 'German',
@@ -17,6 +17,13 @@ const cookingTimeLabels: Record<CookingTime, string> = {
   complex: 'Complex',
 };
 
+const dietLabels: Record<Diet, string> = {
+  vegetarian: 'Vegetarian',
+  vegan: 'Vegan',
+  keto: 'Keto',
+  none: '',
+};
+
 @Component({
   selector: 'app-recipes',
   imports: [RouterLink],
@@ -30,8 +37,21 @@ export class Recipes {
   protected readonly generating = this.recipeRequest.generating;
   protected readonly error = this.recipeRequest.error;
 
-  protected readonly preferenceBadges = computed(() => [
-    ...[...this.recipeRequest.cuisine()].map((value) => cuisineLabels[value]),
-    ...[...this.recipeRequest.cookingTime()].map((value) => cookingTimeLabels[value]),
-  ]);
+  /**
+   * Badges reflecting the preferences that were actually submitted with this request.
+   * Reads the service snapshot rather than the live selection signals, which the
+   * preferences page clears on destroy.
+   */
+  protected readonly preferenceBadges = computed(() => {
+    const submitted = this.recipeRequest.submittedPreferences();
+    if (!submitted) {
+      return [];
+    }
+
+    return [
+      ...submitted.cuisine.map((value) => cuisineLabels[value]),
+      ...submitted.cookingTime.map((value) => cookingTimeLabels[value]),
+      ...submitted.diet.map((value) => dietLabels[value]),
+    ].filter((label) => label.length > 0);
+  });
 }

@@ -42,6 +42,13 @@ interface RecipeRequestPayload {
   prompt: string;
 }
 
+/** The preference selections that were actually sent with the last recipe request. */
+export interface SubmittedPreferences {
+  cookingTime: CookingTime[];
+  cuisine: Cuisine[];
+  diet: Diet[];
+}
+
 const RECIPE_WEBHOOK_URL = 'https://adrian123.app.n8n.cloud/webhook/964ee35f-622c-4f81-bb8c-a4e39440ecca';
 
 /** Upper bound for the portion count on the preferences page. */
@@ -91,6 +98,7 @@ export class RecipeRequest {
   private readonly recipesState = signal<GeneratedRecipe[]>([]);
   private readonly generatingState = signal(false);
   private readonly errorState = signal<string | null>(null);
+  private readonly submittedPreferencesState = signal<SubmittedPreferences | null>(null);
 
   readonly ingredients = this.ingredientsState.asReadonly();
   readonly portions = this.portionsState.asReadonly();
@@ -101,6 +109,12 @@ export class RecipeRequest {
   readonly recipes = this.recipesState.asReadonly();
   readonly generating = this.generatingState.asReadonly();
   readonly error = this.errorState.asReadonly();
+  /**
+   * Snapshot of the preferences sent with the last request. Kept separate from the live
+   * selection signals so the recipes page can still show them after the preferences page
+   * (and its selection) has been destroyed.
+   */
+  readonly submittedPreferences = this.submittedPreferencesState.asReadonly();
 
   private nextIngredientId = 1;
 
@@ -181,6 +195,8 @@ export class RecipeRequest {
     const cookingTime = [...this.cookingTimeState()];
     const cuisine = [...this.cuisineState()];
     const diet = [...this.dietState()];
+
+    this.submittedPreferencesState.set({ cookingTime, cuisine, diet });
 
     const payload: RecipeRequestPayload = {
       ingredients,
