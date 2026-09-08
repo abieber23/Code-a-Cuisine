@@ -27,7 +27,7 @@
 }
 
 .start__logo {
-  width: 140px;
+  width: 120px;
   height: auto;
   margin-bottom: 10rem;
 }
@@ -94,11 +94,19 @@
   min-width: 0;
 }
 
+// Bildgröße überall stufenlos an die Viewport-Höhe gekoppelt: die Teller
+// sitzen bei top:0 / 50% / bottom:0, ihr Abstand ist also immer eine halbe
+// Viewport-Höhe. Wird die Breite in vh angegeben, skalieren Größe und Abstand
+// gemeinsam -> die Überlappung bleibt bei jeder Auflösung identisch.
+//   1. Zahl = Untergrenze (kleine/flache Fenster, kein Überlappen)
+//   2. Zahl = stufenloser Anteil (vh -> wächst mit der Höhe)
+//   3. Zahl = Obergrenze gegen overflow: hidden
+// Nur noch das *Layout* hängt an Media Queries (Breite): 3 nebeneinander /
+// 3 vom Rand reinschauend (<=1100px) / alle 5 (>=1500px).
 .start__image {
   position: absolute;
   left: 50%;
-  width: 70%;
-  max-width: 460px;
+  width: clamp(340px, 42vh, 820px);
   height: auto;
   transform: translateX(-50%);
 }
@@ -123,6 +131,9 @@
   display: none;
 }
 
+// Layout 3: alle 5 Teller. Nur Positionen/Reihenfolge hier — die Größe
+// kommt weiter aus den clamp()-Regeln (mit eigenen vh-Faktoren, weil die
+// optionalen Teller größer sind als die drei Haupt-Teller).
 @media (min-width: 1500px) {
   .start__image--optional-1,
   .start__image--optional-2 {
@@ -130,29 +141,22 @@
   }
 
   .start__image {
-  position: absolute;
-  left: 50%;
-  width: 70%;
-  max-width: 460px;
-  height: auto;
-  transform: translateX(-50%, -50%);
-}
+    width: clamp(420px, 24vh, 900px);
+  }
 
-.start__image--1 {
-  top: 0;
-  
-}
+  .start__image--1 {
+    top: 0;
+  }
 
-.start__image--2 {
-  top: 50%;
-  z-index: 2;
-  transform: translate(-50%, -40%);
-}
+  .start__image--2 {
+    top: 50%;
+    z-index: 2;
+    transform: translate(-50%, -40%);
+  }
 
   .start__image--optional-1 {
     top: 25%;
-    width: 80%;
-    max-width: 525px;
+    width: clamp(480px, 27vh, 1020px);
     transform: translate(-50%, -30%);
     z-index: 1;
   }
@@ -160,8 +164,7 @@
   .start__image--optional-2 {
     top: auto;
     bottom: 0;
-    width: 80%;
-    max-width: 475px;
+    width: clamp(440px, 25vh, 950px);
     transform: translate(-50%, 30%);
     z-index: 4;
   }
@@ -173,40 +176,6 @@
   }
 }
 
-@media (min-height: 1700px) {
-  .start__image {
-    width: 97%;
-    max-width: 629px;
-  }
-
-  .start__image--optional-1 {
-    width: 109%;
-    max-width: 714px;
-  }
-
-  .start__image--optional-2 {
-    width: 109%;
-    max-width: 648px;
-  }
-}
-
-@media (min-height: 2200px) {
-  .start__image {
-    width: 111%;
-    max-width: 726px;
-  }
-
-  .start__image--optional-1 {
-    width: 121%;
-    max-width: 799px;
-  }
-
-  .start__image--optional-2 {
-    width: 121%;
-    max-width: 726px;
-  }
-}
-
 @media (max-width: 1100px) {
   .start__content {
     flex: 1 1 58%;
@@ -214,7 +183,6 @@
   }
 
   .start__logo {
-    width: 100px;
     margin-bottom: 3rem;
   }
 
@@ -243,16 +211,13 @@
     flex: 1 1 42%;
   }
 
+  // Layout 2: die 3 Teller schauen nur vom rechten Rand herein (left: 100%).
+  // Größe wieder stufenlos über die Höhe — Untergrenze bewusst klein, damit
+  // sie sich auf flachen Fenstern (Handy quer) nicht durch ihre Größe
+  // überlappen; die Bildhöhe bleibt so unter der halben Viewport-Höhe.
   .start__image {
-    width: 130%;
-    max-width: none;
+    width: clamp(150px, 46vh, 720px);
     left: 100%;
-  }
-}
-
-@media (max-width: 500px) {
-  .start__image {
-    width: 200%;
   }
 }
 

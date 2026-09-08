@@ -15,7 +15,10 @@ export type Diet = 'vegetarian' | 'vegan' | 'keto' | 'none';
 export interface GeneratedRecipe {
   title?: string;
   description: string;
+  /** Ingredients the user supplied themselves. */
   ingredients: string[];
+  /** Ingredients the recipe generator added on top of the user's list. */
+  extraIngredients?: string[];
   steps: string[];
   calories: number;
   fats: number;
@@ -44,7 +47,7 @@ const RECIPE_WEBHOOK_URL = 'https://adrian123.app.n8n.cloud/webhook/964ee35f-622
 /** Upper bound for the portion count on the preferences page. */
 export const MAX_PORTIONS = 10;
 /** Upper bound for the cook count on the preferences page. */
-export const MAX_COOKS = 6;
+export const MAX_COOKS = 4;
 
 /**
  * Returns a set containing only the given value, enforcing single-select within a preference

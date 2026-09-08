@@ -8,6 +8,21 @@ export interface SavedRecipe extends GeneratedRecipe {
   created_at: string;
 }
 
+/**
+ * Normalizes a raw `recipes` row into a `SavedRecipe`. The extra-ingredients
+ * column has been seen spelled `extraingredients` / `extra_ingredients` and is
+ * null on older rows, so every variant is mapped onto the camelCase
+ * `extraIngredients` the rest of the app uses.
+ */
+function mapRow(
+  row: SavedRecipe & { extraingredients?: string[] | null; extra_ingredients?: string[] | null },
+): SavedRecipe {
+  return {
+    ...row,
+    extraIngredients: row.extraIngredients ?? row.extraingredients ?? row.extra_ingredients ?? [],
+  };
+}
+
 const SUPABASE_URL = 'https://jwtwrbjmlhrfakuenllb.supabase.co';
 const SUPABASE_ANON_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3dHdyYmptbGhyZmFrdWVubGxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNjY0MTQsImV4cCI6MjEwMTk0MjQxNH0.HK1mqfQggV9kqYY2keaxngL27uhZ0H4S4IfojUCsjBs';
@@ -25,7 +40,7 @@ export class SavedRecipes {
         if (error) {
           throw error;
         }
-        return (data ?? []) as SavedRecipe[];
+        return ((data ?? []) as SavedRecipe[]).map(mapRow);
       }),
     );
   }
@@ -37,7 +52,7 @@ export class SavedRecipes {
         if (error) {
           throw error;
         }
-        return (data as SavedRecipe | null) ?? null;
+        return data ? mapRow(data as SavedRecipe) : null;
       }),
     );
   }

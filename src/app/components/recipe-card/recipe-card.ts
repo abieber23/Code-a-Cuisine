@@ -20,6 +20,9 @@ export class RecipeCard {
   protected readonly savedId = computed(() => (this.recipe() as { id?: string }).id ?? null);
   protected readonly likeCount = computed(() => this.likeOverride() ?? this.recipe().likes ?? 0);
 
+  /** Extra ingredients the generator added; empty for older recipes without the field. */
+  protected readonly extraIngredients = computed(() => this.recipe().extraIngredients ?? []);
+
   protected readonly cookNumbers = computed(() =>
     Array.from({ length: Math.max(1, this.recipe().cooks) }, (_, index) => index + 1),
   );

@@ -43,7 +43,7 @@
                   {{ recipe.cookingTime }}
                 </span>
                 <span class="history__mini-likes">
-                  <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
                   </svg>
                   {{ recipe.likes ?? 0 }}
@@ -64,7 +64,10 @@
   <div class="history__cuisines">
     @for (tile of cuisineTiles; track tile.cuisine) {
       <a class="history__cuisine-tile" [routerLink]="['/history/cuisine', tile.cuisine]">
-        <span class="history__cuisine-label">{{ tile.label }} {{ tile.emoji }}</span>
+        <span class="history__cuisine-label">
+          {{ tile.label }}
+          <img class="history__cuisine-icon" [src]="tile.icon" alt="" />
+        </span>
         <img class="history__cuisine-image" [src]="tile.image" [alt]="tile.label" />
       </a>
     }

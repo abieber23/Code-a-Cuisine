@@ -135,8 +135,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid #eef2ea;
+  padding: 0.85rem 0.75rem;
+  margin: 0 -0.75rem;
+
+  transition: background 0.15s ease;
+}
+
+.history-cuisine__row:hover {
+  background: #faf0e6;
+  border-radius: 16px;
 }
 
 .history-cuisine__row:last-child {
@@ -160,8 +167,8 @@
   height: 26px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #f3d9b1;
-  color: #8a5a20;
+  background: #f3e4cd;
+  color: #35471d;
   font-size: 1rem;
   font-weight: 700;
 }
@@ -216,8 +223,8 @@
   gap: 0.25rem;
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
-  background: #f2ede0;
-  color: #b3392c;
+  background: #c4d0c4;
+  color: #162f12;
   font-size: 1rem;
   font-weight: 600;
 }

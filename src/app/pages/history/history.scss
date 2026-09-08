@@ -110,7 +110,7 @@
   width: 220px;
   padding: 1rem 1.1rem;
   border-radius: 14px;
-  background: #ffffff;
+  background: #e3e8e4;
   text-decoration: none;
   color: inherit;
 }
@@ -142,8 +142,8 @@
   gap: 0.25rem;
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
-  background: #f2ede0;
-  color: #b3392c;
+  background: #afc0b0;
+  color: #152d13;
   font-size: 1rem;
   font-weight: 600;
 }
@@ -185,15 +185,23 @@
 }
 
 .history__cuisine-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   color: #2f6b34;
   font-size: 1.15rem;
   font-weight: 600;
 }
 
+.history__cuisine-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 .history__cuisine-image {
   width: 100%;
   aspect-ratio: 4 / 3;
-  border-radius: 16px;
   object-fit: cover;
   transition: transform 0.2s ease;
 }

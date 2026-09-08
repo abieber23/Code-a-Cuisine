@@ -4,14 +4,14 @@
   padding: 1.5rem;
   border: 1px solid #e8ddc9;
   border-radius: 24px;
-  background: #fffaf2;
+  background: #fffbf8;
 }
 
 .recipe-card__header {
   padding: 1.5rem;
   margin: 0 0 2rem;
   border-radius: 18px;
-  background: #f3e8d8;
+  background: #faf0e6;
 }
 
 .recipe-card__header-top {
@@ -81,6 +81,14 @@
 }
 
 .recipe-card__chef {
+  display: inline-block;
+  width: auto;
+  height: 20px;
+  vertical-align: middle;
+}
+
+/* Fallback for chef 5+ (no image available): original pill design. */
+.recipe-card__chef-badge {
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
   background: #cfe0da;
@@ -89,7 +97,7 @@
   font-weight: 600;
 }
 
-.recipe-card__chef--alt {
+.recipe-card__chef-badge--alt {
   background: #f3d9b1;
   color: #8a5a20;
 }
@@ -112,9 +120,7 @@
   height: 14px;
 }
 
-.recipe-card__nutrition {
-  
-}
+
 
 .recipe-card__nutrition-label {
   display: block;
@@ -167,18 +173,26 @@
   font-weight: 700;
 }
 
-.recipe-card__ingredients {
+.recipe-card__ingredient-groups {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem 2rem;
   margin: 0 0 2rem;
+}
+
+.recipe-card__ingredient-subtitle {
+  margin: 0 0 0.5rem;
+  color: #2f6b34;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.recipe-card__ingredient-list {
+  margin: 0;
   padding-left: 1.4rem;
-  columns: 2;
-  column-gap: 2rem;
   color: #233524;
   font-size: 1rem;
   line-height: 1.8;
-}
-
-.recipe-card__ingredients li {
-  break-inside: avoid;
 }
 
 .recipe-card__steps {
@@ -204,10 +218,10 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #2f6b34;
-  color: #fffaf2;
+  background: #faf0e6;
+  color: #192c10;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .recipe-card__step-text {
@@ -224,7 +238,6 @@
   justify-content: center;
   gap: 0.75rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e8ddc9;
   text-align: center;
 }
 
@@ -232,7 +245,11 @@
   margin: 0;
   color: #3f4f3d;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 400;
+}
+
+.recipe-card__like p strong {
+  font-weight: 700;
 }
 
 .recipe-card__heart {
@@ -267,7 +284,7 @@
     grid-template-columns: 1fr;
   }
 
-  .recipe-card__ingredients {
-    columns: 1;
+  .recipe-card__ingredient-groups {
+    grid-template-columns: 1fr;
   }
 }
