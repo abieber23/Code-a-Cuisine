@@ -164,6 +164,15 @@ export class RecipeRequest {
     this.dietState.update((current) => selectSingle(current, value));
   }
 
+  /** Resets portions, cooks and all multi-select preferences back to their defaults. */
+  resetPreferences(): void {
+    this.portionsState.set(2);
+    this.cooksState.set(1);
+    this.cookingTimeState.set(new Set());
+    this.cuisineState.set(new Set());
+    this.dietState.set(new Set());
+  }
+
   /** Posts the current ingredients and preferences to the recipe webhook and stores the result. */
   requestRecipes(): void {
     const ingredients = this.ingredientsState();

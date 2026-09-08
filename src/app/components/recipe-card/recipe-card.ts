@@ -23,6 +23,18 @@ export class RecipeCard {
   /** Extra ingredients the generator added; empty for older recipes without the field. */
   protected readonly extraIngredients = computed(() => this.recipe().extraIngredients ?? []);
 
+  /** Collapse state for the ingredients / directions sections (only used below 650px). */
+  protected readonly ingredientsOpen = signal(true);
+  protected readonly directionsOpen = signal(true);
+
+  protected toggleIngredients(): void {
+    this.ingredientsOpen.update((open) => !open);
+  }
+
+  protected toggleDirections(): void {
+    this.directionsOpen.update((open) => !open);
+  }
+
   protected readonly cookNumbers = computed(() =>
     Array.from({ length: Math.max(1, this.recipe().cooks) }, (_, index) => index + 1),
   );

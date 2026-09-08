@@ -79,7 +79,6 @@ app-recipe-card {
 
 .history-detail__footer {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -89,10 +88,11 @@ app-recipe-card {
   padding: 1.5rem 2rem;
   margin-top: 2.5rem;
   border-radius: 18px;
-  background: #dbe4db;
+  background: #ebf0ec;
 }
 
 .history-detail__footer p {
+  min-width: 0;
   margin: 0;
   color: #233524;
   font-size: 1rem;
@@ -100,6 +100,7 @@ app-recipe-card {
 }
 
 .history-detail__cookbook-btn {
+  flex-shrink: 0;
   padding: 0.7rem 1.6rem;
   background: #2f6b34;
   color: #fffaf2;
@@ -129,4 +130,27 @@ app-recipe-card {
 .history-detail__generate-new svg {
   width: 16px;
   height: 16px;
+}
+
+@media (max-width: 650px) {
+  .history-detail__footer p {
+    text-align: left;
+  }
+}
+
+@media (max-width: 520px) {
+  .history-detail {
+    padding: 1.25rem clamp(0.75rem, 2.5vw, 2rem);
+  }
+}
+
+@media (max-width: 450px) {
+  .history-detail__footer {
+    padding: 0.75rem 1rem;
+    margin-top: 1.25rem;
+  }
+
+  .history-detail__footer p {
+    font-weight: 400;
+  }
 }

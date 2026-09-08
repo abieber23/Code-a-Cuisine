@@ -203,7 +203,7 @@
         -128
       ],
       "id": "104aea1d-bcce-49af-aa77-2373b2a7bd6c",
-      "name": "Create a row1",
+      "name": "Create new recipe in Supabase",
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 1000,
@@ -633,14 +633,14 @@
       "main": [
         [
           {
-            "node": "Create a row1",
+            "node": "Create new recipe in Supabase",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Create a row1": {
+    "Create new recipe in Supabase": {
       "main": [
         [],
         [

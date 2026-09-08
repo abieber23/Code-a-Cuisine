@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CookingTime, Cuisine, Diet, MAX_COOKS, MAX_PORTIONS, RecipeRequest } from '../../services/recipe-request';
 
@@ -8,7 +8,7 @@ import { CookingTime, Cuisine, Diet, MAX_COOKS, MAX_PORTIONS, RecipeRequest } fr
   templateUrl: './preferences.html',
   styleUrl: './preferences.scss',
 })
-export class Preferences {
+export class Preferences implements OnDestroy {
   private readonly recipeRequest = inject(RecipeRequest);
   private readonly router = inject(Router);
 
@@ -77,5 +77,10 @@ export class Preferences {
   protected generateRecipe(): void {
     this.recipeRequest.requestRecipes();
     this.router.navigate(['/recipes']);
+  }
+
+  /** Clears the preference selections when the page is left so they don't carry over. */
+  ngOnDestroy(): void {
+    this.recipeRequest.resetPreferences();
   }
 }

@@ -44,8 +44,8 @@
         <span class="recipe-card__nutrition-label">Nutritional information</span>
         <div class="recipe-card__nutrition-grid">
           <div class="recipe-card__nutrition-item">
-            <strong>{{ recipe().calories }}</strong>
-            <span>kcal Energy</span>
+            <strong>{{ recipe().calories }} kcal</strong>
+            <span>Energy</span>
           </div>
           <div class="recipe-card__nutrition-item">
             <strong>{{ recipe().protein }}g</strong>
@@ -65,49 +65,72 @@
   </div>
 
   <div class="recipe-card__section-header">
-    <img class="recipe-card__section-banner" src="img/recipePage/Ingredients_Header.png" alt="" />
+    <picture>
+      <source media="(max-width: 500px)" srcset="img/recipe_card_section_header_ingredients_mobile.png" />
+      <img class="recipe-card__section-banner" src="img/recipePage/Ingredients_Header.png" alt="" />
+    </picture>
     <h3 class="recipe-card__section-title">Ingredients</h3>
   </div>
-  <div class="recipe-card__ingredient-groups">
-    <div class="recipe-card__ingredient-group">
-      <h4 class="recipe-card__ingredient-subtitle">Your ingredients</h4>
-      <ul class="recipe-card__ingredient-list">
-        @for (ingredient of recipe().ingredients; track ingredient) {
-          <li>{{ ingredient }}</li>
-        }
-      </ul>
-    </div>
-    <div class="recipe-card__ingredient-group">
-      <h4 class="recipe-card__ingredient-subtitle">Extra ingredients</h4>
-      <ul class="recipe-card__ingredient-list">
-        @for (ingredient of extraIngredients(); track ingredient) {
-          <li>{{ ingredient }}</li>
-        } @empty {
-          <li>KEINE</li>
-        }
-      </ul>
+  <div class="recipe-card__collapsible" [class.recipe-card__collapsible--collapsed]="!ingredientsOpen()">
+    <div class="recipe-card__ingredient-groups">
+      <div class="recipe-card__ingredient-group">
+        <h4 class="recipe-card__ingredient-subtitle">Your ingredients</h4>
+        <ul class="recipe-card__ingredient-list">
+          @for (ingredient of recipe().ingredients; track ingredient) {
+            <li>{{ ingredient }}</li>
+          }
+        </ul>
+      </div>
+      <div class="recipe-card__ingredient-group">
+        <h4 class="recipe-card__ingredient-subtitle">Extra ingredients</h4>
+        <ul class="recipe-card__ingredient-list">
+          @for (ingredient of extraIngredients(); track ingredient) {
+            <li>{{ ingredient }}</li>
+          } @empty {
+            <li>KEINE</li>
+          }
+        </ul>
+      </div>
     </div>
   </div>
+  <button type="button" class="recipe-card__section-toggle" (click)="toggleIngredients()">
+    {{ ingredientsOpen() ? 'Hide ingredients' : 'Show ingredients' }}
+    <svg class="recipe-card__section-toggle-icon" [class.recipe-card__section-toggle-icon--open]="ingredientsOpen()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </button>
 
   <div class="recipe-card__section-header">
-    <img class="recipe-card__section-banner" src="img/recipePage/Directions_Header.png" alt="" />
-<h3 class="recipe-card__section-title" style="padding-top: 20px;">Directions</h3>  </div>
-  <ol class="recipe-card__steps">
-    @for (step of recipe().steps; track $index) {
-      <li class="recipe-card__step">
-        <div class="recipe-card__step-head">
-          <span class="recipe-card__step-number">{{ $index + 1 }}</span>
-          @let stepChef = chefForStep($index);
-          @if (stepChef <= 4) {
-            <img class="recipe-card__chef" src="img/Chef_{{ stepChef }}.png" alt="Chef {{ stepChef }}" />
-          } @else {
-            <span class="recipe-card__chef-badge" [class.recipe-card__chef-badge--alt]="stepChef % 2 === 0">Chef {{ stepChef }}</span>
-          }
-        </div>
-        <p class="recipe-card__step-text">{{ step }}</p>
-      </li>
-    }
-  </ol>
+    <picture>
+      <source media="(max-width: 500px)" srcset="img/recipe_card_section_header_directions_mobile.png" />
+      <img class="recipe-card__section-banner" src="img/recipePage/Directions_Header.png" alt="" />
+    </picture>
+    <h3 class="recipe-card__section-title" style="padding-top: 20px;">Directions</h3>
+  </div>
+  <div class="recipe-card__collapsible" [class.recipe-card__collapsible--collapsed]="!directionsOpen()">
+    <ol class="recipe-card__steps">
+      @for (step of recipe().steps; track $index) {
+        <li class="recipe-card__step">
+          <div class="recipe-card__step-head">
+            <span class="recipe-card__step-number">{{ $index + 1 }}</span>
+            @let stepChef = chefForStep($index);
+            @if (stepChef <= 4) {
+              <img class="recipe-card__chef" src="img/Chef_{{ stepChef }}.png" alt="Chef {{ stepChef }}" />
+            } @else {
+              <span class="recipe-card__chef-badge" [class.recipe-card__chef-badge--alt]="stepChef % 2 === 0">Chef {{ stepChef }}</span>
+            }
+          </div>
+          <p class="recipe-card__step-text">{{ step }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+  <button type="button" class="recipe-card__section-toggle" (click)="toggleDirections()">
+    {{ directionsOpen() ? 'Hide Directions' : 'Show Directions' }}
+    <svg class="recipe-card__section-toggle-icon" [class.recipe-card__section-toggle-icon--open]="directionsOpen()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </button>
 
   <div class="recipe-card__like">
     <p><strong>Just finished this meal?</strong> Give it a heart, so that the others know this is delicious.</p>

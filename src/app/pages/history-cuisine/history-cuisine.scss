@@ -278,13 +278,17 @@
 }
 
 @media (max-width: 400px) {
-  .history-cuisine__topbar {
-    flex-wrap: wrap;
-    gap: 1rem;
+
+  .history-cuisine {
+    position: relative;
+    padding-bottom: 5rem;
   }
 
   .history-cuisine__generate-btn {
-    width: 100%;
+    position: absolute;
+    left: clamp(1.5rem, 5vw, 4rem);
+    right: clamp(1.5rem, 5vw, 4rem);
+    bottom: 2.0rem;
     text-align: center;
   }
 

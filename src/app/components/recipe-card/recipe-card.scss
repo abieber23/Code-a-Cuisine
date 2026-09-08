@@ -87,7 +87,6 @@
   vertical-align: middle;
 }
 
-/* Fallback for chef 5+ (no image available): original pill design. */
 .recipe-card__chef-badge {
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
@@ -159,6 +158,11 @@
   margin: 0 0 1.25rem;
 }
 
+.recipe-card__section-header picture {
+  display: block;
+  width: 100%;
+}
+
 .recipe-card__section-banner {
   width: 100%;
   height: auto;
@@ -171,6 +175,31 @@
   color: #2f6b34;
   font-size: 1.15rem;
   font-weight: 700;
+}
+
+.recipe-card__section-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 auto 2rem;
+  padding: 0.45rem 1rem;
+  border: none;
+  background: none;
+  color: #2f6b34;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.recipe-card__section-toggle-icon {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s ease;
+}
+
+.recipe-card__section-toggle-icon--open {
+  transform: rotate(180deg);
 }
 
 .recipe-card__ingredient-groups {
@@ -233,7 +262,6 @@
 
 .recipe-card__like {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
@@ -242,6 +270,7 @@
 }
 
 .recipe-card__like p {
+  min-width: 0;
   margin: 0;
   color: #3f4f3d;
   font-size: 1rem;
@@ -254,6 +283,7 @@
 
 .recipe-card__heart {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 0.35rem;
   padding: 0.3rem 0.6rem;
@@ -279,6 +309,21 @@
   cursor: default;
 }
 
+@media (max-width: 650px) {
+  .recipe-card__like p {
+    text-align: left;
+  }
+
+  .recipe-card__section-toggle {
+    display: flex;
+    width: fit-content;
+  }
+
+  .recipe-card__collapsible--collapsed {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .recipe-card__steps {
     grid-template-columns: 1fr;
@@ -286,5 +331,45 @@
 
   .recipe-card__ingredient-groups {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .recipe-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .recipe-card__header-top {
+    display: contents;
+  }
+
+  .recipe-card__badges {
+    order: 1;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .recipe-card__section-title {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .recipe-card {
+    padding: 0.75rem;
+  }
+
+  .recipe-card__header {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .recipe-card__nutrition-grid {
+    gap: 0.375rem 0.875rem;
   }
 }
