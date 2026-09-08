@@ -202,7 +202,7 @@
 
   .start__image {
     width: clamp(150px, 46vh, 720px);
-    left: 100%;
+    left: 110%;
   }
 }
 
@@ -215,4 +215,18 @@
   margin-bottom: 2rem;
 
 }
+}
+
+@media (max-width: 460px) and (min-height: 780px) {
+  .start__image {
+    width: clamp(120px, 30vh, 620px);
+  }
+
+  .start__image--1 {
+    transform: translate(-50%, 42%);
+  }
+
+  .start__image--3 {
+    transform: translate(-50%, -32%);
+  }
 }
