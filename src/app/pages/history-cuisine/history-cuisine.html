@@ -13,7 +13,10 @@
   </a>
 
   <div class="history-cuisine__banner">
-    <img class="history-cuisine__banner-img" src="img/cookbookPage/cuisine_header.png" alt="" />
+    <picture>
+      <source media="(max-width: 600px)" srcset="img/cookbookPage/cuisine_header_mobile.png" />
+      <img class="history-cuisine__banner-img" src="img/cookbookPage/cuisine_header.png" alt="" />
+    </picture>
     <h1 class="history-cuisine__banner-title">{{ cuisine() }} cuisine</h1>
   </div>
 

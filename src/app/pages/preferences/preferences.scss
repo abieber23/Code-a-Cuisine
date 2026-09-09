@@ -222,6 +222,11 @@
 }
 
 @media (max-width: 500px) {
+  .prefs__title {
+  font-size: 24px;
+  text-align: left;
+  }
+
   .prefs__counters {
   justify-content: flex-start;
   }

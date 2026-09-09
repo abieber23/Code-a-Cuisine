@@ -215,7 +215,7 @@ export class RecipeRequest {
       next: (response) => {
         this.generatingState.set(false);
         if (!Array.isArray(response)) {
-          this.errorState.set('Unexpected response format from recipe generator.');
+          this.errorState.set('Ups! Something went wrong, please try again.');
           return;
         }
         this.recipesState.set(response);

@@ -67,6 +67,11 @@
   margin-bottom: 3rem;
 }
 
+.history-cuisine__banner picture {
+  display: block;
+  width: 100%;
+}
+
 .history-cuisine__banner-img {
   width: 100%;
   height: auto;
@@ -275,6 +280,25 @@
 
 .history-cuisine__ellipsis {
   color: #5c6b57;
+}
+
+@media (max-width: 700px) {
+  .history-cuisine__row:nth-child(even) {
+    background: #fcf5ed;
+    border-radius: 16px;
+  }
+
+  .history-cuisine__row-link {
+    flex-wrap: wrap;
+  }
+
+  .history-cuisine__row-main {
+    display: contents;
+  }
+
+  .history-cuisine__row-title {
+    flex-basis: 100%;
+  }
 }
 
 @media (max-width: 400px) {

@@ -1,4 +1,17 @@
 <article class="recipe-card">
+  <ng-template #chefTag let-n>
+    <span
+      class="recipe-card__chef-badge"
+      [class]="'recipe-card__chef-badge--c' + n"
+      [class.recipe-card__chef-badge--alt]="n > 4 && n % 2 === 0"
+    >
+      @if (n <= 4) {
+        <img class="recipe-card__chef-icon" src="img/chef{{ n }}.png" alt="" />
+      }
+      Chef {{ n }}
+    </span>
+  </ng-template>
+
   <div class="recipe-card__header">
     <div class="recipe-card__header-top">
       <span class="recipe-card__time">
@@ -8,56 +21,54 @@
         </svg>
         Cooking time: {{ recipe().cookingTime }}
       </span>
-
-      <div class="recipe-card__badges">
-        @if (recipe().diet !== 'none') {
-          <span class="recipe-card__badge">{{ recipe().diet }}</span>
-        }
-        <span class="recipe-card__badge">{{ recipe().cookingTime }}</span>
-      
-        <span class="recipe-card__badge recipe-card__badge--likes">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-          </svg>
-          {{ likeCount() }}
-        </span>
-      </div>
     </div>
 
     <div class="recipe-card__header-main">
       <div class="recipe-card__header-info">
         <h2 class="recipe-card__title">{{ recipe().title || 'Recipe' }}</h2>
         <div class="recipe-card__cooks">
-          <span>Cooking persons: {{ recipe().cooks }}</span>
+          <span class="recipe-card__cooks-label">Cooking persons: {{ recipe().cooks }}</span>
           @for (chef of cookNumbers(); track chef) {
-            @if (chef <= 4) {
-              <img class="recipe-card__chef" src="img/Chef_{{ chef }}.png" alt="Chef {{ chef }}" />
-            } @else {
-              <span class="recipe-card__chef-badge" [class.recipe-card__chef-badge--alt]="chef % 2 === 0">Chef {{ chef }}</span>
-            }
+            <ng-container [ngTemplateOutlet]="chefTag" [ngTemplateOutletContext]="{ $implicit: chef }" />
           }
         </div>
-        
+
       </div>
 
-      <div class="recipe-card__nutrition">
-        <span class="recipe-card__nutrition-label">Nutritional information</span>
-        <div class="recipe-card__nutrition-grid">
-          <div class="recipe-card__nutrition-item">
-            <strong>{{ recipe().calories }} kcal</strong>
-            <span>Energy</span>
-          </div>
-          <div class="recipe-card__nutrition-item">
-            <strong>{{ recipe().protein }}g</strong>
-            <span>Protein</span>
-          </div>
-          <div class="recipe-card__nutrition-item">
-            <strong>{{ recipe().fats }}g</strong>
-            <span>Fat</span>
-          </div>
-          <div class="recipe-card__nutrition-item">
-            <strong>{{ recipe().carbs }}g</strong>
-            <span>Carbs</span>
+      <div class="recipe-card__header-side">
+        <div class="recipe-card__badges">
+          @if (recipe().diet !== 'none') {
+            <span class="recipe-card__badge">{{ recipe().diet }}</span>
+          }
+          <span class="recipe-card__badge">{{ recipe().cookingTime }}</span>
+
+          <span class="recipe-card__badge recipe-card__badge--likes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+            </svg>
+            {{ likeCount() }}
+          </span>
+        </div>
+
+        <div class="recipe-card__nutrition">
+          <span class="recipe-card__nutrition-label">Nutritional information</span>
+          <div class="recipe-card__nutrition-grid">
+            <div class="recipe-card__nutrition-item">
+              <strong>{{ recipe().calories }} kcal</strong>
+              <span>Energy</span>
+            </div>
+            <div class="recipe-card__nutrition-item">
+              <strong>{{ recipe().protein }}g</strong>
+              <span>Protein</span>
+            </div>
+            <div class="recipe-card__nutrition-item">
+              <strong>{{ recipe().fats }}g</strong>
+              <span>Fat</span>
+            </div>
+            <div class="recipe-card__nutrition-item">
+              <strong>{{ recipe().carbs }}g</strong>
+              <span>Carbs</span>
+            </div>
           </div>
         </div>
       </div>
@@ -114,11 +125,7 @@
           <div class="recipe-card__step-head">
             <span class="recipe-card__step-number">{{ $index + 1 }}</span>
             @let stepChef = chefForStep($index);
-            @if (stepChef <= 4) {
-              <img class="recipe-card__chef" src="img/Chef_{{ stepChef }}.png" alt="Chef {{ stepChef }}" />
-            } @else {
-              <span class="recipe-card__chef-badge" [class.recipe-card__chef-badge--alt]="stepChef % 2 === 0">Chef {{ stepChef }}</span>
-            }
+            <ng-container [ngTemplateOutlet]="chefTag" [ngTemplateOutletContext]="{ $implicit: stepChef }" />
           </div>
           <p class="recipe-card__step-text">{{ step }}</p>
         </li>
@@ -133,13 +140,14 @@
   </button>
 
   <div class="recipe-card__like">
-    <p><strong>Just finished this meal?</strong> Give it a heart, so that the others know this is delicious.</p>
+    <p><strong>Just finished this meal?</strong> Give it a heart, so that the others know this is delicious. Tap again to take it back.</p>
     <button
       type="button"
       class="recipe-card__heart"
       [class.recipe-card__heart--active]="liked()"
-      [disabled]="liked() || liking()"
-      (click)="giveHeart()"
+      [disabled]="liking()"
+      [attr.aria-pressed]="liked()"
+      (click)="toggleHeart()"
     >
       <svg viewBox="0 0 24 24" [attr.fill]="liked() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />

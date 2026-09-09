@@ -293,6 +293,20 @@
   color: #1c4620;
 }
 
+@media (max-width: 800px) {
+  .generate__title {
+    font-size: 32px;
+  }
+
+  .generate__intro {
+    text-align: left;
+  }
+
+  .generate__next-row {
+    justify-content: center;
+  }
+}
+
 @media (max-width: 700px) {
   .generate__panels {
     flex-direction: column;

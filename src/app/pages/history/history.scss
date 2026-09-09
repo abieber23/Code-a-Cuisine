@@ -210,15 +210,19 @@
   transform: scale(1.02);
 }
 
+.history__generate-new-row {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 1100px;
+}
+
 .history__generate-new {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  justify-content: flex-end;
-  width: 100%;
-  max-width: 1100px;
   color: #2f6b34;
-  font-size: 1rem;
+  font-size: 20px;
   font-weight: 600;
   text-decoration: none;
 }

@@ -1,10 +1,11 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { GeneratedRecipe } from '../../services/recipe-request';
 import { SavedRecipes } from '../../services/saved-recipes';
 
 @Component({
   selector: 'app-recipe-card',
-  imports: [],
+  imports: [NgTemplateOutlet],
   templateUrl: './recipe-card.html',
   styleUrl: './recipe-card.scss',
 })
@@ -45,24 +46,34 @@ export class RecipeCard {
     return (stepIndex % cooks) + 1;
   }
 
-  /** Likes the recipe once. Persists via the SavedRecipes service for saved recipes, or just updates locally for a freshly generated one that hasn't been saved yet. */
-  giveHeart(): void {
-    if (this.liked() || this.liking()) {
+  /**
+   * Toggles the heart: adds a like on the first click, removes it again on the next.
+   * Persists each change to Supabase for saved recipes, or just updates locally for a
+   * freshly generated one that hasn't been saved yet.
+   */
+  toggleHeart(): void {
+    if (this.liking()) {
       return;
     }
 
+    const adding = !this.liked();
     const id = this.savedId();
+
     if (!id) {
-      this.liked.set(true);
-      this.likeOverride.set(this.likeCount() + 1);
+      this.liked.set(adding);
+      this.likeOverride.set(this.likeCount() + (adding ? 1 : -1));
       return;
     }
 
     this.liking.set(true);
-    this.savedRecipes.incrementLikes(id, this.likeCount()).subscribe({
+    const request = adding
+      ? this.savedRecipes.incrementLikes(id, this.likeCount())
+      : this.savedRecipes.decrementLikes(id, this.likeCount());
+
+    request.subscribe({
       next: (newCount) => {
         this.liking.set(false);
-        this.liked.set(true);
+        this.liked.set(adding);
         this.likeOverride.set(newCount);
       },
       error: (err) => {

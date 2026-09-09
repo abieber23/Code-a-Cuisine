@@ -22,14 +22,14 @@
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 3rem clamp(2rem, 5vw, 5rem);
+  padding: 3rem 0 1rem 1rem;
   z-index: 1;
 }
 
 .start__logo {
   width: 120px;
   height: auto;
-  margin-bottom: 10rem;
+  margin-bottom: 8rem;
 }
 
 .start__eyebrow {
@@ -40,7 +40,7 @@
 
 .start__title {
   margin: 0 0 2.5rem;
-  font-size: 104px;
+  font-size: 100px;
   font-weight: 800;
   line-height: 1.05;
 }
@@ -51,6 +51,8 @@
   border: none;
   background: #f5efe0;
   color: #3a6039;
+  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -81,6 +83,8 @@
   gap: 0.4rem;
   opacity: 0.85;
   transition: opacity 0.2s ease;
+  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
   font-size: 20px;
 }
 
@@ -228,5 +232,12 @@
 
   .start__image--3 {
     transform: translate(-50%, -32%);
+  }
+}
+
+@media (max-width: 340px) {
+  .start__cta {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }

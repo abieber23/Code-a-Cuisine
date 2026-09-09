@@ -59,7 +59,16 @@ export class SavedRecipes {
 
   /** Increments and persists the like count for the given recipe, returning the new total. */
   incrementLikes(id: string, currentLikes: number): Observable<number> {
-    const likes = currentLikes + 1;
+    return this.setLikes(id, currentLikes + 1);
+  }
+
+  /** Decrements and persists the like count for the given recipe (never below 0), returning the new total. */
+  decrementLikes(id: string, currentLikes: number): Observable<number> {
+    return this.setLikes(id, Math.max(0, currentLikes - 1));
+  }
+
+  /** Persists an absolute like count for the given recipe, returning it back once the write succeeds. */
+  private setLikes(id: string, likes: number): Observable<number> {
     return from(this.client.from('recipes').update({ likes }).eq('id', id)).pipe(
       map(({ error }) => {
         if (error) {
